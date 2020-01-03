@@ -1,16 +1,6 @@
 %%%%%%%%%%%%%%%% MSN system %%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%% MSN_init.m %%%%%%%%%%%%%%%%%%%%%%%%
-% This script is used to simulate the MSN system %%%
-% from Pitiphol Pholpabu and Lie-Liant Yang .%%%%%%%
-% This system depends on RPM model. %%%%%%%%%%%%%%%%
-% The proposed model can intergate people's roles, %
-% daily activies and occasional acitivies. %%%%%%%%%
-% The part of routing protocols will be later. %%%%%
-
-clc;
-clear all;
-close all;
-close all hidden;
+% This script is used to initialize the MSN system %
 
 %% Simulation Setup
 
@@ -39,16 +29,16 @@ V_walk = 1.4; %(m/s) MN's walk speed
 
 P_home = 0.5; %(-) MN's probabity of go home
 N_act = 2; %(activities) MN's maximum activities
+L_prefer = [1 10]; %the occurrence probabilities reflected by the preference
 
 r = 30; %(m) MN check their neigobors within a range of 30
 
 % Timing Settings
-D = 5; %(days)
+D = 15; %(days)
 T = 24 * 60 * 60 * D; %(s)
 T_arrive = [7 9] * 60 * 60; %(s) 7-9AM 7:00-9:00
 T_depart = [16 18] * 60 * 60; %(s) 4-6PM 16:00-18:00
 T_pause = [30 180] * 60; %(s) 30-180min for pause
 T_interval = 60; %(s) an interval for update
-
 
 
