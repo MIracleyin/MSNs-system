@@ -14,6 +14,41 @@ close all hidden;
 
 %% Simulation Setup
 
-% Simulation area
-Length = 1000; %(m)
-Width = 1000; %(m)
+% Simulation area size Value = 1000*1000 Unit m^2
+sLength = 1000; %(m) 
+sWidth = 1000; %(m)
+
+% Community area size Value = 100*100 Unit m^2 
+cLength = 100; %(m)
+cWidth = 100; %(m)
+
+% Communities Settings
+N_communities = 15; %(communities) number of communities
+
+% Mobile Nodes Settings
+N_nodes = 50; %(MNs) number of MNs
+
+% A speed is chosen betweet V_max and V_min uniformly,
+% which represents the speed of its cross-community.
+V_max = 20; %(m/s) MN's maximum speed
+V_min = 1; %(m/s) MN's minumum speed
+
+% A speed is V_walk, which represents 
+% the speed of its inside-community.
+V_walk = 1.4; %(m/s) MN's walk speed
+
+P_home = 0.5; %(-) MN's probabity of go home
+N_act = 2; %(activities) MN's maximum activities
+
+r = 30; %(m) MN check their neigobors within a range of 30
+
+% Timing Settings
+D = 5; %(days)
+T = 24 * 60 * 60 * D; %(s)
+T_arrive = [7 9] * 60 * 60; %(s) 7-9AM 7:00-9:00
+T_depart = [16 18] * 60 * 60; %(s) 4-6PM 16:00-18:00
+T_pause = [30 180] * 60; %(s) 30-180min for pause
+T_interval = 60; %(s) an interval for update
+
+
+
