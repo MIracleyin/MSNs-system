@@ -12,11 +12,14 @@ clear all;
 close all;
 close all hidden;
 
-%% Initialiaze parameters used for simulations
+%% Initialiaze parameters used for simulations.
 MSN_init;
 
+%% Initialiaze simulations area and communities.
+AREA_init;
+
 %% Simulate the mobile of MNs and record its data
-MSN_RPM;
+%MSN_RPM;
 
 %% Visualization
-Plot_MNtrace;
+Plot_Area
