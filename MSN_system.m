@@ -7,19 +7,19 @@
 % daily activies and occasional acitivies. %%%%%%%%%
 % The part of routing protocols will be later. %%%%%
 
-clc;
-clear all;
-close all;
-close all hidden;
+%clc;
+%clear all;
+%close all;
+%close all hidden;
 
 %% Initialiaze parameters used for simulations.
 MSN_init;
 
 %% Initialiaze simulations area and communities.
-AREA_init;
+%AREA_init;
 
 %% Simulate the mobile of MNs and record its data
-%MSN_RPM;
+MSN_RPM;
 
 %% Visualization
-Plot_Area
+Plot_Area;

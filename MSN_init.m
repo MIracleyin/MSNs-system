@@ -41,4 +41,23 @@ T_depart = [16 18] * 60 * 60; %(s) 4-6PM 16:00-18:00
 T_pause = [30 180] * 60; %(s) 30-180min for pause
 T_interval = 60; %(s) an interval for update
 
+% Add all system settings into struct intput_settings
+%'MN_L_prefer',L_prefer%the occurrence probabilities reflected by the preference
+%TODO:L_prefer
+input_settings = struct('sMAP_X',[0 sLength],...
+                         'sMAP_Y',[0 sWidth],... %Size of Simulation Map
+                         'cAREA_X',[0 cLength],...
+                         'cAREA_Y',[0 cWidth],...%Size of Community Area
+                         'cAREA_N',N_communities,...%Number of Community Areas
+                         'MN_N',N_nodes,...%Number of MNs
+                         'MN_N_act',N_act,...%Number of MNs' acts
+                         'MN_V_corss',[V_min V_max],...%Speed of MNs' Cross-Community
+                         'MN_V_inside',V_walk,...%Speed of MNs' Inside-Community
+                         'MN_P_home',P_home,...%Probabity of MNs' go home
+                         'MN_R',r,...%MN check their neigobors within a range of 30
+                         'sT_R',T,...%Time range of Simulation
+                         'MN_T_arrive',T_arrive,...
+                         'MN_T_depart',T_depart,...
+                         'MN_T_pause',T_pause,...
+                         'MN_T_interval',T_interval);
 

@@ -12,15 +12,12 @@ for n = 1:N_communities
     line([cCenter(n,1)-cLength/2,cCenter(n,1)-cLength/2],[cCenter(n,2)-cWidth/2,cCenter(n,2)+cWidth/2])
     hold on
 end
-    %for n = N_communities
-%    line([cCenter_up(n,1)-50,cCenter_up(n,1)+50],[cCenter_up(n,1),cCenter_up(n,2)])
-%    hold on 
-%end
-%line([cCenter_up(1,1)-50,cCenter_up(1,1)+50],[cCenter_up(1,2),cCenter_up(1,2)])
+
+scatter(MNborn_x,MNborn_y);
 
 grid on
 box on
 xlim([0,sLength]);
-xticks(0:sLength/10:sLength);
+xticks(0:sLength/5:sLength);
 ylim([0,sWidth]);
-yticks(0:sWidth/10:sWidth);
+yticks(0:sWidth/5:sWidth);
