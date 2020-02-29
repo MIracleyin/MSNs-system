@@ -13,13 +13,18 @@
 %close all hidden;
 
 %% Initialiaze parameters used for simulations.
-MSN_init;
-
+%MSN_init;
+%load('MSN_init_data');
 %% Initialiaze simulations area and communities.
 %AREA_init;
 
 %% Simulate the mobile of MNs and record its data
-MSN_RPM;
+test_1 = MSN_RPM(input_settings);
 
 %% Visualization
-Plot_Area;
+%Plot_Area;
+
+%% Save system's variables
+% Set destination folder
+
+%save('MSN_init_data);
