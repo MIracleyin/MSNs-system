@@ -13,7 +13,7 @@
 %close all hidden;
 
 %% Initialiaze parameters used for simulations.
-%MSN_init;
+MSN_init;
 %load('MSN_init_data');
 %% Initialiaze simulations area and communities.
 %AREA_init;
@@ -27,4 +27,4 @@ test_1 = MSN_RPM(input_settings);
 %% Save system's variables
 % Set destination folder
 
-%save('MSN_init_data);
+save('MSN_init_data');

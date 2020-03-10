@@ -33,50 +33,72 @@ cCenter_x = 0;
 cCenter_y = 0;
 cCenter_x = b_x(1) + (b_x(2)-b_x(1)) * rand(input_settings.cAREA_N,1);
 cCenter_y = b_x(1) + (b_x(2)-b_x(1)) * rand(input_settings.cAREA_N,1);
-cCenter = [cCenter_x, cCenter_y];
+cCenter = [cCenter_x cCenter_y];
 
 
 %TODO:message deliver parts.
 
 %Initializing MN_DATA Values   
-for MN_INDEX = 1:input_settings.MN_N
+for MN_INDEX = 1:input_settings.MN_N/50
        %random 1 - cAREA_N
        %生成节点的家、节点在地图上的绝对位置
-       MN_DATA_temp.VS_NODE(MN_INDEX).HOME = unidrnd(input_settings.cAREA_N); %节点随机出生的家
-       MN_DATA_temp.VS_NODE(MN_INDEX).HOME_LOC = cCenter(MN_DATA_temp.VS_NODE(MN_INDEX).HOME); %标记家的坐标
-       MN_DATA_temp.VS_NODE(MN_INDEX).X_POSITION = ... %生成出生点x坐标
+       %节点随机出生的家
+       MN_DATA_temp.VS_NODE(MN_INDEX).HOME = unidrnd(input_settings.cAREA_N); 
+       %标记家的坐标
+       MN_DATA_temp.VS_NODE(MN_INDEX).HOME_LOC = ...
+       [cCenter_x(MN_DATA_temp.VS_NODE(MN_INDEX).HOME) cCenter_y(MN_DATA_temp.VS_NODE(MN_INDEX).HOME)];
+       %生成出生点x坐标
+       MN_DATA_temp.VS_NODE(MN_INDEX).X_POSITION = ... 
        unifrnd(cCenter_x(MN_DATA_temp.VS_NODE(MN_INDEX).HOME) - input_settings.cAREA_X(2)/2,...
                cCenter_x(MN_DATA_temp.VS_NODE(MN_INDEX).HOME) + input_settings.cAREA_X(2)/2);
-       %MN_DATA_temp.VS_NODE(MN_INDEX).X_POSITION = ... %生成出生点x坐标
-       %cCenter_x(MN_DATA_temp.VS_NODE(MN_INDEX).HOME) - input_settings.cAREA_X(2)/2 +...
-       %rand(1) * input_settings.cAREA_X(2);
-       MN_DATA_temp.VS_NODE(MN_INDEX).X_POSITION = ... %生成出生点y坐标
+       %生成出生点y坐标
+       MN_DATA_temp.VS_NODE(MN_INDEX).Y_POSITION = ... 
        unifrnd(cCenter_y(MN_DATA_temp.VS_NODE(MN_INDEX).HOME) - input_settings.cAREA_Y(2)/2,...
                cCenter_y(MN_DATA_temp.VS_NODE(MN_INDEX).HOME) + input_settings.cAREA_Y(2)/2);
-       %MN_DATA_temp.VS_NODE(MN_INDEX).Y_POSITION = ... %生成出生点y坐标
-       %cCenter_y(MN_DATA_temp.VS_NODE(MN_INDEX).HOME) - input_settings.cAREA_Y(2)/2 +...
-       %rand(1) * input_settings.cAREA_Y(2);
        
+       %节点时间坐标
+       MN_DATA_temp.VS_NODE(MN_INDEX).V_TIME = []; 
+      
        %节点的主要任务1.携带随机信息2.7-9点间随机从家出发到主任务点3.16-18点间随机离开主任务点
        %完成主任务中的2./3.
-       %生成节点主任务开始时间
+
+       %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+       %生成节点主任务地点
+       %主任务地点不能为家
+       MN_DATA_temp.VS_NODE(MN_INDEX).P_community = MN_DATA_temp.VS_NODE(MN_INDEX).HOME;%将任务地点设为家
+       while MN_DATA_temp.VS_NODE(MN_INDEX).P_community == MN_DATA_temp.VS_NODE(MN_INDEX).HOME%当任务地点为家时，循环成立
+              MN_DATA_temp.VS_NODE(MN_INDEX).P_community = unidrnd(input_settings.cAREA_N);%任务随机生成，当随机任务不为家时，循环结束
+       end
+       %主任务坐标
+       MN_DATA_temp.VS_NODE(MN_INDEX).P_community_LOC = ...
+       [cCenter_x(MN_DATA_temp.VS_NODE(MN_INDEX).P_community) cCenter_y(MN_DATA_temp.VS_NODE(MN_INDEX).P_community)];
+       % 主任务地点可以为家
+       %MN_DATA_temp.VS_NODE(MN_INDEX).P_community = unidrnd(input_settings.cAREA_N);
+
+       %生成节点主任务开始时间 
+       
+       %节点随机生成到达主任务通信区时间
        MN_DATA_temp.VS_NODE(MN_INDEX).P_T_arrive = input_settings.MN_T_arrive(1) +... 
        unidrnd(input_settings.MN_T_arrive(2) - input_settings.MN_T_arrive(1));
+       %节点在到达以主任务通信区后，随机暂停[30-180]分钟
+       MN_DATA_temp.VS_NODE(MN_INDEX).P_T_work = MN_DATA_temp.VS_NODE(MN_INDEX).P_T_arrive +...
+       input_settings.MN_T_pause(1) + ...
+       unidrnd(input_settings.MN_T_pause(2) - input_settings.MN_T_pause(1));
        %生成节点主任务结束时间
        MN_DATA_temp.VS_NODE(MN_INDEX).P_T_depart = input_settings.MN_T_depart(1) +... 
        unidrnd(input_settings.MN_T_depart(2) - input_settings.MN_T_depart(1));
-       %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-       %生成节点主任务地点
-       MN_DATA_temp.VS_NODE(MN_INDEX).P_community = unidrnd(input_settings.cAREA_N);
+
        %计算生成节点到目标通信区的直线路径
        MN_DATA_temp.VS_NODE(MN_INDEX).P_trace_long = ...
        sqrt(( cCenter_x( MN_DATA_temp.VS_NODE(MN_INDEX).P_community ) - ...
-              MN_DATA_temp.VS_NODE(MN_INDEX).X_POSITION ).^2 + ...
+              MN_DATA_temp.VS_NODE(MN_INDEX).X_POSITION(end) ).^2 + ...
             ( cCenter_y( MN_DATA_temp.VS_NODE(MN_INDEX).P_community ) - ...
               MN_DATA_temp.VS_NODE(MN_INDEX).Y_POSITION ).^2 );
        %在通信区之间，使用中间速度[1 20]
        MN_DATA_temp.VS_NODE(MN_INDEX).P_trace_v = ...
        unidrnd(input_settings.MN_V_corss(2) - input_settings.MN_V_corss(1));
+
+
        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
        %主任务路上花掉的时间，使用向下取整的办法
        MN_DATA_temp.VS_NODE(MN_INDEX).P_T_trace = ...
@@ -84,24 +106,209 @@ for MN_INDEX = 1:input_settings.MN_N
        %移动节点出发前往主任务的时间
        MN_DATA_temp.VS_NODE(MN_INDEX).P_T_start = ...
        MN_DATA_temp.VS_NODE(MN_INDEX).P_T_arrive - MN_DATA_temp.VS_NODE(MN_INDEX).P_T_trace;
+
+       %移动节点开始工作以后的初角度
+       MN_DATA_temp.VS_NODE(MN_INDEX).MVOING_DIRECTION = unifrnd(input_settings.MN_A_inside(1),input_settings.MN_A_inside(2))
+       %节点是否移动
+       MN_DATA_temp.VS_NODE(MN_INDEX).IS_MOVING = rand(1,1) > input_settings.MN_P_move;
+
+       %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+       %%%%%%%%%%%%%%%MOVE1 节点在家中等待出发%%%%%%%%%%%%%%%%%%
+       %直接等待
+       %MN_DATA_temp.VS_NODE(MN_INDEX).X_POSITION(end + 1) = ...
+       %floor(MN_DATA_temp.VS_NODE(MN_INDEX).X_POSITION(end) + 0); %X方向无移动
+       %MN_DATA_temp.VS_NODE(MN_INDEX).Y_POSITION(end + 1) = ...
+       %floor(MN_DATA_temp.VS_NODE(MN_INDEX).Y_POSITION(end) + 0); %Y方向无移动
+       
+       
+       time_go = 0; %等待开始时间
+       time_step = input_settings.MN_T_interval;
+       time_end = MN_DATA_temp.VS_NODE(MN_INDEX).P_T_start;%等待结束
+
+       for time = time_go : time_step : time_end
+              %设置一时间坐标，每次更新
+              MN_DATA_temp.VS_NODE(MN_INDEX).V_TIME(end + 1) = time;
+              %记录上一次节点x坐标
+              MN_DATA_temp.VS_NODE(MN_INDEX).X_POSITION(end + 1) = ...
+              MN_DATA_temp.VS_NODE(MN_INDEX).X_POSITION(end) + 0; %原地等待
+              %记录上一次节点y坐标
+              MN_DATA_temp.VS_NODE(MN_INDEX).Y_POSITION(end + 1) = ...
+              MN_DATA_temp.VS_NODE(MN_INDEX).Y_POSITION(end) + 0; %原地等待
+       end
+       %}
+
+       %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+       %%%%%%%%%%%%%%%MOVE2 节点出发到达目标位置%%%%%%%%%%%%%%%%%
+       %%直接移动至目标点
+       %{
+       MN_DATA_temp.VS_NODE(MN_INDEX).X_POSITION(end + 1) = ...
+       MN_DATA_temp.VS_NODE(MN_INDEX).P_community_LOC(1); %节点X直接移动至目标位置X
+       MN_DATA_temp.VS_NODE(MN_INDEX).Y_POSITION(end + 1) = ...
+       MN_DATA_temp.VS_NODE(MN_INDEX).P_community_LOC(2); %节点Y直接移动至目标位置Y
+       %}
+       
+       time_go = MN_DATA_temp.VS_NODE(MN_INDEX).P_T_start; %节点出发
+       time_step = input_settings.MN_T_interval;
+       time_end = MN_DATA_temp.VS_NODE(MN_INDEX).P_T_arrive;%节点到达目标
+       
+       temp_angle_cos = ... %计算节点x方向增量
+       (MN_DATA_temp.VS_NODE(MN_INDEX).P_community_LOC(1) - MN_DATA_temp.VS_NODE(MN_INDEX).X_POSITION(end))/...
+       MN_DATA_temp.VS_NODE(MN_INDEX).P_trace_long;
+
+       temp_angle_sin = ... %计算节点y方向增量
+       (MN_DATA_temp.VS_NODE(MN_INDEX).P_community_LOC(2) - MN_DATA_temp.VS_NODE(MN_INDEX).Y_POSITION(end))/...
+       MN_DATA_temp.VS_NODE(MN_INDEX).P_trace_long;
+
+       for time = time_go : time_step : time_end %修改步长，使之不至于过头
+              %设置一时间坐标，每次更新
+              MN_DATA_temp.VS_NODE(MN_INDEX).V_TIME(end + 1) = time;
+              %更新上一次节点x坐标，每次更新，x方向增量 * x方向距离
+              MN_DATA_temp.VS_NODE(MN_INDEX).X_POSITION(end + 1) = ...
+              floor(MN_DATA_temp.VS_NODE(MN_INDEX).X_POSITION(end) + ...
+              temp_angle_cos * MN_DATA_temp.VS_NODE(MN_INDEX).P_trace_v * time_step);
+              %更新上一次节点y坐标，每次更新，y方向增量 * y方向距离
+              MN_DATA_temp.VS_NODE(MN_INDEX).Y_POSITION(end + 1) = ...
+              floor(MN_DATA_temp.VS_NODE(MN_INDEX).Y_POSITION(end) + ...
+              temp_angle_sin * MN_DATA_temp.VS_NODE(MN_INDEX).P_trace_v * time_step);
+       end
+       %}
+       %%节点到目标通信区中心
+       MN_DATA_temp.VS_NODE(MN_INDEX).X_POSITION(end + 1) = ...
+       MN_DATA_temp.VS_NODE(MN_INDEX).P_community_LOC(1); %节点到达目标X
+       MN_DATA_temp.VS_NODE(MN_INDEX).Y_POSITION(end + 1) = ...
+       MN_DATA_temp.VS_NODE(MN_INDEX).P_community_LOC(2); %节点到达目标Y
+
        %移动节点开始主任务
+       %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+       %%%%%%%%%%%%%%%%MOVE3 随机漫步%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
        %移动节点在主任务通信区内做随机漫步运动
        %时间间隔为60s
-       time_step = input_settings.MN_T_interval;
-       MN_DATA_temp.VS_NODE(MN_INDEX).MOVING_DIRECTION = ... %随机漫步的初始角度
-       rand(1) * 
-MN_DATA_temp.VS_NODE(MN_INDEX).X_POSITION = ... %生成出生点x坐标
-       cCenter_x(MN_DATA_temp.VS_NODE(MN_INDEX).HOME) - input_settings.cAREA_X(2)/2 +...
-       rand(1) * input_settings.cAREA_X(2);
-       %对某节点，取从主任务到达时间，到主任务结束时间
-       for time = MN_T_arrive : time_step : MN_T_depart
-              MN_DATA_temp.VS_NODE(MN_INDEX).V_TIME(end + 1) = time;%设置一时间坐标，每次更新
-              temp_x = MN_DATA_temp.VS_NODE(MN_INDEX).X_POSITION(end);%记录上一次节点x坐标
-              temp_y = MN_DATA_temp.VS_NODE(MN_INDEX).Y_POSITION(end);%记录上一次节点y坐标
-              %当节点在通信区内时，使用中间速度fang
-              temp_v = input_settings.MN_V_inside;
        
+       time_go = MN_DATA_temp.VS_NODE(MN_INDEX).P_T_work; %随机漫步开始时间为到达时间
+       time_step = input_settings.MN_T_interval;
+       time_end = MN_DATA_temp.VS_NODE(MN_INDEX).P_T_depart;%随机漫步结束时间
+
+       %对某节点，取从主任务到达时间，到主任务结束时间
+       for time = time_go : time_step : time_end
+              %设置一时间坐标，每次更新
+              MN_DATA_temp.VS_NODE(MN_INDEX).V_TIME(end + 1) = time;
+
+              %记录上一次节点x坐标
+              temp_x = MN_DATA_temp.VS_NODE(MN_INDEX).X_POSITION(end);
+              %记录上一次节点y坐标
+              temp_y = MN_DATA_temp.VS_NODE(MN_INDEX).Y_POSITION(end);
+              %当节点在通信区内时，使用中间速度
+              temp_v = input_settings.MN_V_inside;
+              %运动距离
+              temp_distance = temp_v * time_step;
+              %每次随机生成一个运动角度
+              temp_angle = MN_DATA_temp.VS_NODE(MN_INDEX).MVOING_DIRECTION(end);
+              %每次随机确定下一步时间间隔是否移动
+              temp_is_movie = rand(1,1) > input_settings.MN_P_move;
+
+              if( temp_is_movie == 1 )
+                     %计算x,y方向位移
+                     new_x = temp_x + temp_distance * cosd(temp_angle);
+                     new_y = temp_y + temp_distance * sind(temp_angle);
+
+                     flag_mobility_was_outside = false;
+
+                     %当x位置超出通信区x方向最大值
+                     %如果新的位置，在通信区x方向之外
+                     if(new_x > MN_DATA_temp.VS_NODE(MN_INDEX).P_community_LOC(1) + input_settings.cAREA_X(2)/2)
+                            flag_mobility_was_outside = true;
+                            new_angle = 180 - temp_angle;
+                            new_x = MN_DATA_temp.VS_NODE(MN_INDEX).P_community_LOC(1) + input_settings.cAREA_X(2)/2;
+                            new_y = temp_y + diff([temp_x new_x]) * tand(temp_angle);
+                     end
+
+                     %%当x位置低于通信区x方向最小值
+                     %如果新的位置，在通信区x方向之外
+                     if(new_x < MN_DATA_temp.VS_NODE(MN_INDEX).P_community_LOC(1) - input_settings.cAREA_X(2)/2)
+                            flag_mobility_was_outside = true;
+                            new_angle = 180 - temp_angle;
+                            new_x = MN_DATA_temp.VS_NODE(MN_INDEX).P_community_LOC(1) - input_settings.cAREA_X(2)/2;
+                            new_y = temp_y + diff([temp_x new_x]) * tand(temp_angle);
+                     end
+
+                     %%当y位置低于通信区y方向最大值
+                     %如果新的位置，在通信区y方向之外
+                     if(new_y > MN_DATA_temp.VS_NODE(MN_INDEX).P_community_LOC(2) + input_settings.cAREA_Y(2)/2)
+                            flag_mobility_was_outside = true;
+                            new_angle = - temp_angle;
+                            new_y = MN_DATA_temp.VS_NODE(MN_INDEX).P_community_LOC(2) + input_settings.cAREA_Y(2)/2;
+                            new_x = temp_x + diff([temp_y new_y]) / tand(temp_angle);
+                     end
+                     
+                     %%当y位置低于通信区y方向最小值
+                     %如果新的位置，在通信区y方向之外
+                     if(new_y < MN_DATA_temp.VS_NODE(MN_INDEX).P_community_LOC(2) - input_settings.cAREA_Y(2)/2)
+                            flag_mobility_was_outside = true;
+                            new_angle = - temp_angle;
+                            new_y = MN_DATA_temp.VS_NODE(MN_INDEX).P_community_LOC(2) - input_settings.cAREA_Y(2)/2;
+                            new_x = temp_x + diff([temp_y new_y]) / tand(temp_angle);
+                     end
+
+                     if(flag_mobility_was_outside)
+                            MN_DATA_temp.VS_NODE(MN_INDEX).MVOING_DIRECTION(end + 1) = new_angle;
+                     end
+
+                     %将新计算的x、y赋值
+                     MN_DATA_temp.VS_NODE(MN_INDEX).X_POSITION(end + 1) = new_x;
+                     MN_DATA_temp.VS_NODE(MN_INDEX).Y_POSITION(end + 1) = new_y;
+              else
+                     MN_DATA_temp.VS_NODE(MN_INDEX).X_POSITION(end + 1) = temp_x;
+                     MN_DATA_temp.VS_NODE(MN_INDEX).Y_POSITION(end + 1) = temp_y; 
+              end
+              %}
        end
+       %}
+       %移动节点开始支线任务
+       %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+       %%%%%%%%%%%%%%%%MOVE3 WPM %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+       %移动节点最大参加2次支线任务，从工作区离开到达支线任务通信区
+       %并随机在支线任务通信区内任意地点暂停特定时间
+       %时间间隔为60s
+
+
+       %移动节点回家
+       %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+       %%%%%%%%%%%%%%%MOVE4 WPM %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+       %移动节点由最后位置回到出生点
+       %计算移动节点最后位置到出生点的距离
+
+
+       time_go = MN_DATA_temp.VS_NODE(MN_INDEX).P_T_depart; %从主任务结束后回家
+       time_step = input_settings.MN_T_interval;
+       time_end = input_settings.sTIME;%
+       
+       temp_angle_cos = ... %计算节点x方向增量
+       (MN_DATA_temp.VS_NODE(MN_INDEX).P_community_LOC(1) - MN_DATA_temp.VS_NODE(MN_INDEX).X_POSITION(end))/...
+       MN_DATA_temp.VS_NODE(MN_INDEX).P_trace_long;
+
+       temp_angle_sin = ... %计算节点y方向增量
+       (MN_DATA_temp.VS_NODE(MN_INDEX).P_community_LOC(2) - MN_DATA_temp.VS_NODE(MN_INDEX).Y_POSITION(end))/...
+       MN_DATA_temp.VS_NODE(MN_INDEX).P_trace_long;
+
+       for time = time_go : time_step : time_end %修改步长，使之不至于过头
+              %设置一时间坐标，每次更新
+              MN_DATA_temp.VS_NODE(MN_INDEX).V_TIME(end + 1) = time;
+              %更新上一次节点x坐标，每次更新，x方向增量 * x方向距离
+              MN_DATA_temp.VS_NODE(MN_INDEX).X_POSITION(end + 1) = ...
+              floor(MN_DATA_temp.VS_NODE(MN_INDEX).X_POSITION(end) + ...
+              temp_angle_cos * MN_DATA_temp.VS_NODE(MN_INDEX).P_trace_v * time_step);
+              %更新上一次节点y坐标，每次更新，y方向增量 * y方向距离
+              MN_DATA_temp.VS_NODE(MN_INDEX).Y_POSITION(end + 1) = ...
+              floor(MN_DATA_temp.VS_NODE(MN_INDEX).Y_POSITION(end) + ...
+              temp_angle_sin * MN_DATA_temp.VS_NODE(MN_INDEX).P_trace_v * time_step);
+       end
+       %}
+       %%节点到目标通信区中心
+       MN_DATA_temp.VS_NODE(MN_INDEX).X_POSITION(end + 1) = ...
+       MN_DATA_temp.VS_NODE(MN_INDEX).P_community_LOC(1); %节点到达目标X
+       MN_DATA_temp.VS_NODE(MN_INDEX).Y_POSITION(end + 1) = ...
+       MN_DATA_temp.VS_NODE(MN_INDEX).P_community_LOC(2); %节点到达目标Y
+
 end
 
 
