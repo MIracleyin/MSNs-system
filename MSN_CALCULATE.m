@@ -101,7 +101,7 @@ for time = 1 : 24 * 60 %考虑到抽样
                 else
                     %若节点1以及和节点2相遇过，为了防止相同的时间多次相遇（这不符合常理）
                     %若时间与最后一次相遇的时间不同
-                    if( (time * 60 ~= MN_DATA_temp.VS_NODE(MN_INDEX_2).SOCIAL_CONTANT(MN_INDEX_1).MEETING_TIME(end) ))
+                    if( (time * 60 == MN_DATA_temp.VS_NODE(MN_INDEX_2).SOCIAL_CONTANT(MN_INDEX_1).MEETING_TIME(end) ))
                         MN_DATA_temp.VS_NODE(MN_INDEX_2).MEET_ALLTIMES = ... %节点1总相遇次数+1
                         MN_DATA_temp.VS_NODE(MN_INDEX_2).MEET_ALLTIMES + 1;
                         %此时无需记录节点ID，因为已经有过记录
@@ -115,6 +115,23 @@ for time = 1 : 24 * 60 %考虑到抽样
                 end     
             end
         end
+    end
+    
+end
+
+%社交参数的计算
+for MN_INDEX_1 = 1 : input_settings.MN_N
+    for MN_INDEX_2 =  1 : input_settings.MN_N
+        %MN_DATA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTANT(MN_INDEX_2).ENCOUNTER_PROBABILITY = ...
+        %MN_DATA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTANT(MN_INDEX_2).MEET_TIMES/...
+        %MN_DATA_temp.VS_NODE(MN_INDEX_1).MEET_ALLTIMES;
+        %使用公式2
+        MN_DATA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTANT(MN_INDEX_2).ENCOUNTER_PROBABILITY = ...
+        MN_DATA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTANT(MN_INDEX_2).MEET_TIMES / 1440;
+
+        %计算公式4,5
+        
+        
     end
 end
 
