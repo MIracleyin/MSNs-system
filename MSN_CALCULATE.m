@@ -127,11 +127,46 @@ for MN_INDEX_1 = 1 : input_settings.MN_N
         %MN_DATA_temp.VS_NODE(MN_INDEX_1).MEET_ALLTIMES;
         %使用公式2
         MN_DATA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTANT(MN_INDEX_2).ENCOUNTER_PROBABILITY = ...
-        MN_DATA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTANT(MN_INDEX_2).MEET_TIMES / 1440;
+        MN_DATA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTANT(MN_INDEX_2).MEET_TIMES / 1440;%MEET_TINES/1440
 
-        %计算公式4,5
-        
-        
+        %计算公式4,5 需要修正
+        %如果相遇次数小于2，那么
+        if(MN_DATA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTANT(MN_INDEX_2).MEET_TIMES < 2)
+            MN_DATA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTANT(MN_INDEX_2).ENCOUNTER_REGULARITY = 0;
+        else
+            %4 
+            SUM_T = 0;
+            for M_counter =  2 : MN_DATA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTANT(MN_INDEX_2).MEET_TIMES
+                SUM_T = SUM_T + ...
+                ( MN_DATA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTANT(MN_INDEX_2).MEETING_TIME(M_counter) - ...
+                MN_DATA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTANT(MN_INDEX_2).MEETING_TIME(M_counter - 1) );
+            end
+            MN_DATA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTANT(MN_INDEX_2).DELTA_T = ...
+            1/(MN_DATA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTANT(MN_INDEX_2).MEET_TIMES - 1) * SUM_T;
+            
+            %5
+            SUM_T_diff = 0;
+            for M_counter =  2 : MN_DATA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTANT(MN_INDEX_2).MEET_TIMES
+                SUM_T_diff = SUM_T_diff + ...
+                ( MN_DATA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTANT(MN_INDEX_2).MEETING_TIME(M_counter) - ...
+                MN_DATA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTANT(MN_INDEX_2).MEETING_TIME(M_counter - 1) - ...
+                MN_DATA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTANT(MN_INDEX_2).DELTA_T )^2;
+            end
+            MN_DATA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTANT(MN_INDEX_2).S_DELTA_T = ...
+            sqrt( 1/(MN_DATA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTANT(MN_INDEX_2).MEET_TIMES - 2) * SUM_T_diff);
+
+            %3
+            MN_DATA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTANT(MN_INDEX_2).ENCOUNTER_REGULARITY = ...
+            MN_DATA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTANT(MN_INDEX_2).DELTA_T / ...
+            (MN_DATA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTANT(MN_INDEX_2).DELTA_T + ...
+            MN_DATA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTANT(MN_INDEX_2).S_DELTA_T)
+        end
+
+        %6
+        MN_DATA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTANT(MN_INDEX_2).DIRECT_PROBABILITY = ...
+        MN_DATA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTANT(MN_INDEX_2).ENCOUNTER_REGULARITY * ...
+        MN_DATA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTANT(MN_INDEX_2).ENCOUNTER_PROBABILITY;
+        %结合仿真时长，可以结合8修正ageing效应
     end
 end
 
