@@ -3,7 +3,7 @@
 % This script is used to simulate the mobile of MNs%
 %此版本为结束主任务后直接回家
 
-function [MN_DATA input_settings] = MSN_RPM2(input_settings, AREA_DATA)
+function [MN_DATA input_settings] = MSN_RPM2(input_settings, AREA_DATA, MN_DATA_INIT)
     %mobile_RPM - Description
     %
     % Syntax: [MN_DATA AREA_DATA input_setting] = mobile_RPM(input_setting)
@@ -25,8 +25,8 @@ function [MN_DATA input_settings] = MSN_RPM2(input_settings, AREA_DATA)
                                 
     % community center
     %% Initializing Community Area
-    cCenter_x = 0;
-    cCenter_y = 0;
+    %cCenter_x = 0;
+    %cCenter_y = 0;
     cCenter_x = AREA_DATA.cCenter_x;
     cCenter_y = AREA_DATA.cCenter_y
     cCenter = AREA_DATA.cCenter;
@@ -38,7 +38,8 @@ function [MN_DATA input_settings] = MSN_RPM2(input_settings, AREA_DATA)
            %random 1 - cAREA_N
            %生成节点的家、节点在地图上的绝对位置
            %节点随机出生的家
-           MN_DATA_temp.VS_NODE(MN_INDEX).HOME = unidrnd(input_settings.cAREA_N); 
+           MN_DATA_temp.VS_NODE(MN_INDEX).HOME = ...
+           MN_DATA_INIT.VS_NODE(MN_INDEX).HOME; %使用MN_INIT.m生成，保证后续出生位置不发生变化
            %标记家的坐标
            MN_DATA_temp.VS_NODE(MN_INDEX).HOME_LOC = ...
            [cCenter_x(MN_DATA_temp.VS_NODE(MN_INDEX).HOME) cCenter_y(MN_DATA_temp.VS_NODE(MN_INDEX).HOME)];
@@ -63,10 +64,8 @@ function [MN_DATA input_settings] = MSN_RPM2(input_settings, AREA_DATA)
            %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
            %生成节点主任务地点
            %主任务地点不能为家
-           MN_DATA_temp.VS_NODE(MN_INDEX).P_community = MN_DATA_temp.VS_NODE(MN_INDEX).HOME;%将任务地点设为家
-           while MN_DATA_temp.VS_NODE(MN_INDEX).P_community == MN_DATA_temp.VS_NODE(MN_INDEX).HOME%当任务地点为家时，循环成立
-                  MN_DATA_temp.VS_NODE(MN_INDEX).P_community = unidrnd(input_settings.cAREA_N);%任务随机生成，当随机任务不为家时，循环结束
-           end
+           MN_DATA_temp.VS_NODE(MN_INDEX).P_community = ...
+           MN_DATA_INIT.VS_NODE(MN_INDEX).P_community;%保证后续仿真时间不发生变化
            %主任务坐标
            MN_DATA_temp.VS_NODE(MN_INDEX).P_community_LOC = ...
            [cCenter_x(MN_DATA_temp.VS_NODE(MN_INDEX).P_community) cCenter_y(MN_DATA_temp.VS_NODE(MN_INDEX).P_community)];
