@@ -2,7 +2,7 @@
 %%%%%%%%%%%%%%%% MN_init.m %%%%%%%%%%%%%%%%%%%%%%%%%
 % This script is used to initialize the MN DATA %%%%
 
-function [MN_DATA_INIT input_settings] = MN_INTI(input_settings, AREA_DATA)
+function [MN_DATA_INIT] = MN_INTI(input_settings, AREA_DATA)
 
     clear MN_DATA_INIT_temp;
 
@@ -22,6 +22,7 @@ function [MN_DATA_INIT input_settings] = MN_INTI(input_settings, AREA_DATA)
         while MN_DATA_INIT_temp.VS_NODE(MN_INDEX).P_community == MN_DATA_INIT_temp.VS_NODE(MN_INDEX).HOME%当任务地点为家时，循环成立
                 MN_DATA_INIT_temp.VS_NODE(MN_INDEX).P_community = unidrnd(input_settings.cAREA_N);%任务随机生成，当随机任务不为家时，循环结束
         end
+        
     end
 
     MN_DATA_INIT = MN_DATA_INIT_temp;

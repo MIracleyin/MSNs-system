@@ -3,7 +3,7 @@
 % This script is used to simulate the mobile of MNs%
 %此版本为结束主任务后直接回家
 
-function [MN_DATA input_settings] = MSN_RPM2(input_settings, AREA_DATA, MN_DATA_INIT)
+function [MN_DATA] = MSN_RPM2(input_settings, AREA_DATA, MN_DATA_INIT)
     %mobile_RPM - Description
     %
     % Syntax: [MN_DATA AREA_DATA input_setting] = mobile_RPM(input_setting)
@@ -44,7 +44,7 @@ function [MN_DATA input_settings] = MSN_RPM2(input_settings, AREA_DATA, MN_DATA_
            MN_DATA_temp.VS_NODE(MN_INDEX).HOME_LOC = ...
            [cCenter_x(MN_DATA_temp.VS_NODE(MN_INDEX).HOME) cCenter_y(MN_DATA_temp.VS_NODE(MN_INDEX).HOME)];
            %生成出生点x坐标
-           MN_DATA_temp.VS_NODE(MN_INDEX).X_POSITION = ... 
+           MN_DATA_temp.VS_NODE(MN_INDEX).X_POSITION = ... %每次仿真，节点在家出生的位置都不尽相同
            unifrnd(cCenter_x(MN_DATA_temp.VS_NODE(MN_INDEX).HOME) - input_settings.cAREA_X(2)/2,...
                    cCenter_x(MN_DATA_temp.VS_NODE(MN_INDEX).HOME) + input_settings.cAREA_X(2)/2);
            %生成出生点y坐标
@@ -531,9 +531,10 @@ function [MN_DATA input_settings] = MSN_RPM2(input_settings, AREA_DATA, MN_DATA_
             MN_DATA_temp.VS_NODE(MN_INDEX).V_TIME = MN_DATA_temp.VS_NODE(MN_INDEX).V_TIME - 1;
     end 
     
+    
 
     MN_DATA = MN_DATA_temp;
-    end
+end
            
     
     
