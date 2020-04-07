@@ -27,15 +27,15 @@ for MN_INDEX = 1 : input_settings.MN_N
     %每一个节点都创建50个记录与对应节点相遇的储存空间
     for INTERMEET_INDEX = 1 : input_settings.MN_N
         %节点1与节点INTERMEET_INDEX的相遇记录，社交参数
-        MN_DATA_temp.VS_NODE(MN_INDEX).SOCIAL_CONTANT(INTERMEET_INDEX).ID = INTERMEET_INDEX;
+        MN_DATA_temp.VS_NODE(MN_INDEX).SOCIAL_CONTACT(INTERMEET_INDEX).ID = INTERMEET_INDEX;
         %用于记录节点1与INTERMMET_INDEX的相遇次数
-        MN_DATA_temp.VS_NODE(MN_INDEX).SOCIAL_CONTANT(INTERMEET_INDEX).MEET_TIMES = 0;
+        MN_DATA_temp.VS_NODE(MN_INDEX).SOCIAL_CONTACT(INTERMEET_INDEX).MEET_TIMES = 0;
         %用于记录节点1与INTERMMET_INDEX的相遇时间
-        MN_DATA_temp.VS_NODE(MN_INDEX).SOCIAL_CONTANT(INTERMEET_INDEX).MEETING_TIME = [];
+        MN_DATA_temp.VS_NODE(MN_INDEX).SOCIAL_CONTACT(INTERMEET_INDEX).MEETING_TIME = [];
         %两节点之间的相遇概率 = 1节点遇到2节点次数/1节点遇到所有节点的次数 
-        MN_DATA_temp.VS_NODE(MN_INDEX).SOCIAL_CONTANT(INTERMEET_INDEX).ENCOUNTER_PROBABILITY = 0;
+        MN_DATA_temp.VS_NODE(MN_INDEX).SOCIAL_CONTACT(INTERMEET_INDEX).ENCOUNTER_PROBABILITY = 0;
         %修正 ：1节点遇到2节点次数/最大相遇次数
-        %MN_DATA_temp.VS_NODE(MN_INDEX).SOCIAL_CONTANT(INTERMEET_INDEX).ENCOUNTER_PROBABILITY = 0;
+        %MN_DATA_temp.VS_NODE(MN_INDEX).SOCIAL_CONTACT(INTERMEET_INDEX).ENCOUNTER_PROBABILITY = 0;
         %TODO:待补充
     end
 end
@@ -69,22 +69,22 @@ for time = 1 : 24 * 60 %考虑到抽样
                     MN_DATA_temp.VS_NODE(MN_INDEX_1).MEET_ALLTIMES + 1;
                     MN_DATA_temp.VS_NODE(MN_INDEX_1).MEET_ID(end + 1) = MN_INDEX_2; %记录相遇对象的ID
                     %节点1 与 节点2 的社会联系
-                    MN_DATA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTANT(MN_INDEX_2).MEET_TIMES = ...
-                    MN_DATA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTANT(MN_INDEX_2).MEET_TIMES + 1;%节点1与节点2相遇次数+1
-                    MN_DATA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTANT(MN_INDEX_2).MEETING_TIME(end + 1) = ...
+                    MN_DATA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).MEET_TIMES = ...
+                    MN_DATA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).MEET_TIMES + 1;%节点1与节点2相遇次数+1
+                    MN_DATA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).MEETING_TIME(end + 1) = ...
                     MN_DATA_temp.VS_NODE(MN_INDEX_1).V_TIME(time);%记录节点1与节点2的相遇时刻
                 else
                     %若节点1以及和节点2相遇过，为了防止相同的时间多次相遇（这不符合常理）
                     %若时间与最后一次相遇的时间不同
-                    if( (time * 60 ~= MN_DATA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTANT(MN_INDEX_2).MEETING_TIME(end) ))
+                    if( (time * 60 ~= MN_DATA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).MEETING_TIME(end) ))
                         MN_DATA_temp.VS_NODE(MN_INDEX_1).MEET_ALLTIMES = ... %节点1总相遇次数+1
                         MN_DATA_temp.VS_NODE(MN_INDEX_1).MEET_ALLTIMES + 1;
                         %此时无需记录节点ID，因为已经有过记录
                         %MN_DATA_temp.VS_NODE(MN_INDEX_1).MEET_ID(end + 1) = MN_INDEX_2; %记录相遇对象的ID
                         %节点1 与 节点2 的社会联系
-                        MN_DATA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTANT(MN_INDEX_2).MEET_TIMES = ...
-                        MN_DATA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTANT(MN_INDEX_2).MEET_TIMES + 1;%节点1与节点2相遇次数+1
-                        MN_DATA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTANT(MN_INDEX_2).MEETING_TIME(end + 1) = ...
+                        MN_DATA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).MEET_TIMES = ...
+                        MN_DATA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).MEET_TIMES + 1;%节点1与节点2相遇次数+1
+                        MN_DATA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).MEETING_TIME(end + 1) = ...
                         MN_DATA_temp.VS_NODE(MN_INDEX_1).V_TIME(time);%记录节点1与节点2的相遇时刻
                     end
                 end
@@ -94,22 +94,22 @@ for time = 1 : 24 * 60 %考虑到抽样
                     MN_DATA_temp.VS_NODE(MN_INDEX_2).MEET_ALLTIMES + 1;
                     MN_DATA_temp.VS_NODE(MN_INDEX_2).MEET_ID(end + 1) = MN_INDEX_1; %记录相遇对象的ID
                     %节点1 与 节点2 的社会联系
-                    MN_DATA_temp.VS_NODE(MN_INDEX_2).SOCIAL_CONTANT(MN_INDEX_1).MEET_TIMES = ...
-                    MN_DATA_temp.VS_NODE(MN_INDEX_2).SOCIAL_CONTANT(MN_INDEX_1).MEET_TIMES + 1;%节点1与节点2相遇次数+1
-                    MN_DATA_temp.VS_NODE(MN_INDEX_2).SOCIAL_CONTANT(MN_INDEX_1).MEETING_TIME(end + 1) = ...
+                    MN_DATA_temp.VS_NODE(MN_INDEX_2).SOCIAL_CONTACT(MN_INDEX_1).MEET_TIMES = ...
+                    MN_DATA_temp.VS_NODE(MN_INDEX_2).SOCIAL_CONTACT(MN_INDEX_1).MEET_TIMES + 1;%节点1与节点2相遇次数+1
+                    MN_DATA_temp.VS_NODE(MN_INDEX_2).SOCIAL_CONTACT(MN_INDEX_1).MEETING_TIME(end + 1) = ...
                     MN_DATA_temp.VS_NODE(MN_INDEX_2).V_TIME(time);%记录节点1与节点2的相遇时刻
                 else
                     %若节点1以及和节点2相遇过，为了防止相同的时间多次相遇（这不符合常理）
                     %若时间与最后一次相遇的时间不同
-                    if( (time * 60 == MN_DATA_temp.VS_NODE(MN_INDEX_2).SOCIAL_CONTANT(MN_INDEX_1).MEETING_TIME(end) ))
+                    if( (time * 60 == MN_DATA_temp.VS_NODE(MN_INDEX_2).SOCIAL_CONTACT(MN_INDEX_1).MEETING_TIME(end) ))
                         MN_DATA_temp.VS_NODE(MN_INDEX_2).MEET_ALLTIMES = ... %节点1总相遇次数+1
                         MN_DATA_temp.VS_NODE(MN_INDEX_2).MEET_ALLTIMES + 1;
                         %此时无需记录节点ID，因为已经有过记录
                         %MN_DATA_temp.VS_NODE(MN_INDEX_1).MEET_ID(end + 1) = MN_INDEX_2; %记录相遇对象的ID
                         %节点1 与 节点2 的社会联系
-                        MN_DATA_temp.VS_NODE(MN_INDEX_2).SOCIAL_CONTANT(MN_INDEX_1).MEET_TIMES = ...
-                        MN_DATA_temp.VS_NODE(MN_INDEX_2).SOCIAL_CONTANT(MN_INDEX_1).MEET_TIMES + 1;%节点1与节点2相遇次数+1
-                        MN_DATA_temp.VS_NODE(MN_INDEX_2).SOCIAL_CONTANT(MN_INDEX_1).MEETING_TIME(end + 1) = ...
+                        MN_DATA_temp.VS_NODE(MN_INDEX_2).SOCIAL_CONTACT(MN_INDEX_1).MEET_TIMES = ...
+                        MN_DATA_temp.VS_NODE(MN_INDEX_2).SOCIAL_CONTACT(MN_INDEX_1).MEET_TIMES + 1;%节点1与节点2相遇次数+1
+                        MN_DATA_temp.VS_NODE(MN_INDEX_2).SOCIAL_CONTACT(MN_INDEX_1).MEETING_TIME(end + 1) = ...
                         MN_DATA_temp.VS_NODE(MN_INDEX_2).V_TIME(time);%记录节点1与节点2的相遇时刻
                     end
                 end     
@@ -122,53 +122,53 @@ end
 %社交参数的计算
 for MN_INDEX_1 = 1 : input_settings.MN_N
     for MN_INDEX_2 =  1 : input_settings.MN_N
-        %MN_DATA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTANT(MN_INDEX_2).ENCOUNTER_PROBABILITY = ...
-        %MN_DATA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTANT(MN_INDEX_2).MEET_TIMES/...
+        %MN_DATA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).ENCOUNTER_PROBABILITY = ...
+        %MN_DATA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).MEET_TIMES/...
         %MN_DATA_temp.VS_NODE(MN_INDEX_1).MEET_ALLTIMES;
         %使用公式2
-        MN_DATA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTANT(MN_INDEX_2).ENCOUNTER_PROBABILITY = ...
-        MN_DATA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTANT(MN_INDEX_2).MEET_TIMES / 1440;%MEET_TINES/1440
+        MN_DATA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).ENCOUNTER_PROBABILITY = ...
+        MN_DATA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).MEET_TIMES / 1440;%MEET_TINES/1440
 
         %计算公式4,5 需要修正
         %如果相遇次数小于2，那么
-        if(MN_DATA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTANT(MN_INDEX_2).MEET_TIMES < 2)
-            MN_DATA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTANT(MN_INDEX_2).ENCOUNTER_REGULARITY = 0;
+        if(MN_DATA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).MEET_TIMES < 2)
+            MN_DATA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).ENCOUNTER_REGULARITY = 0;
         else
             %4 
             SUM_T = 0;
-            for M_counter =  2 : MN_DATA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTANT(MN_INDEX_2).MEET_TIMES
+            for M_counter =  2 : MN_DATA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).MEET_TIMES
                 SUM_T = SUM_T + ...
-                ( MN_DATA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTANT(MN_INDEX_2).MEETING_TIME(M_counter) - ...
-                MN_DATA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTANT(MN_INDEX_2).MEETING_TIME(M_counter - 1) );
+                ( MN_DATA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).MEETING_TIME(M_counter) - ...
+                MN_DATA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).MEETING_TIME(M_counter - 1) );
             end
-            MN_DATA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTANT(MN_INDEX_2).DELTA_T = ...
-            1/(MN_DATA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTANT(MN_INDEX_2).MEET_TIMES - 1) * SUM_T;
+            MN_DATA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).DELTA_T = ...
+            1/(MN_DATA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).MEET_TIMES - 1) * SUM_T;
             
             %5
             SUM_T_diff = 0;
-            for M_counter =  2 : MN_DATA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTANT(MN_INDEX_2).MEET_TIMES
+            for M_counter =  2 : MN_DATA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).MEET_TIMES
                 SUM_T_diff = SUM_T_diff + ...
-                ( MN_DATA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTANT(MN_INDEX_2).MEETING_TIME(M_counter) - ...
-                MN_DATA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTANT(MN_INDEX_2).MEETING_TIME(M_counter - 1) - ...
-                MN_DATA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTANT(MN_INDEX_2).DELTA_T )^2;
+                ( MN_DATA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).MEETING_TIME(M_counter) - ...
+                MN_DATA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).MEETING_TIME(M_counter - 1) - ...
+                MN_DATA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).DELTA_T )^2;
             end
-            MN_DATA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTANT(MN_INDEX_2).S_DELTA_T = ...
-            sqrt( 1/(MN_DATA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTANT(MN_INDEX_2).MEET_TIMES - 2) * SUM_T_diff);
-            if isnan(MN_DATA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTANT(MN_INDEX_2).S_DELTA_T)
-                MN_DATA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTANT(MN_INDEX_2).S_DELTA_T = 0;
+            MN_DATA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).S_DELTA_T = ...
+            sqrt( 1/(MN_DATA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).MEET_TIMES - 2) * SUM_T_diff);
+            if isnan(MN_DATA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).S_DELTA_T)
+                MN_DATA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).S_DELTA_T = 0;
             end
 
             %3
-            MN_DATA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTANT(MN_INDEX_2).ENCOUNTER_REGULARITY = ...
-            MN_DATA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTANT(MN_INDEX_2).DELTA_T / ...
-            (MN_DATA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTANT(MN_INDEX_2).DELTA_T + ...
-            MN_DATA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTANT(MN_INDEX_2).S_DELTA_T)
+            MN_DATA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).ENCOUNTER_REGULARITY = ...
+            MN_DATA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).DELTA_T / ...
+            (MN_DATA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).DELTA_T + ...
+            MN_DATA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).S_DELTA_T)
         end
 
         %6
-        MN_DATA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTANT(MN_INDEX_2).DIRECT_PROBABILITY = ...
-        MN_DATA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTANT(MN_INDEX_2).ENCOUNTER_REGULARITY * ...
-        MN_DATA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTANT(MN_INDEX_2).ENCOUNTER_PROBABILITY;
+        MN_DATA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).DIRECT_PROBABILITY = ...
+        MN_DATA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).ENCOUNTER_REGULARITY * ...
+        MN_DATA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).ENCOUNTER_PROBABILITY;
         %结合仿真时长，可以结合8修正ageing效应
     end
 end
