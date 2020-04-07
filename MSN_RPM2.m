@@ -28,7 +28,7 @@ function [MN_DATA] = MSN_RPM2(input_settings, AREA_DATA, MN_DATA_INIT)
     %cCenter_x = 0;
     %cCenter_y = 0;
     cCenter_x = AREA_DATA.cCenter_x;
-    cCenter_y = AREA_DATA.cCenter_y
+    cCenter_y = AREA_DATA.cCenter_y;
     cCenter = AREA_DATA.cCenter;
     
     %TODO:message deliver parts.

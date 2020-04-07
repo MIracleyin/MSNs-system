@@ -22,7 +22,7 @@ function [AREA_DATA] = MSN_AREA(input_settings)
     
     AREA_DATA.cCenter_x = cCenter_x_temp;
     AREA_DATA.cCenter_y = cCenter_y_temp;
-    AREA_DATA.cCenter = cCenter_temp
+    AREA_DATA.cCenter = cCenter_temp;
 
 
 end
