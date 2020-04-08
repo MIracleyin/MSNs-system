@@ -69,7 +69,9 @@ for MN_INDEX_1 = 1 : input_settings.MN_N %源节点MN1
         end
     end
 end
-
+wait_bar = waitbar(0 , 'Mobile Node HOP3 calculate');
+set(wait_bar, 'name', 'Mobile Node HOP3 calculating...');
+wb = 50/length(1:input_settings.MN_N)
 %HOP3
 for MN_INDEX_1 = 1 : input_settings.MN_N
     for MN_INDEX_2 = 1 : input_settings.MN_N
@@ -89,7 +91,11 @@ for MN_INDEX_1 = 1 : input_settings.MN_N
             end
         end
     end
+    str_bar = ['NO.' num2str(wb) ' Mobile Node HOP3 calculating...']
+    waitbar(wb/50, wait_bar, str_bar);
+    wb = wb + 50/length(1:input_settings.MN_N)
 end
+close(wait_bar);
 
 %HOP4
 %for MN_INDEX_1 = 1 : input_settings.MN_N

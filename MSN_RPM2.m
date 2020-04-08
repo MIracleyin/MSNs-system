@@ -33,6 +33,10 @@ function [MN_DATA] = MSN_RPM2(input_settings, AREA_DATA, MN_DATA_INIT)
     
     %TODO:message deliver parts.
     
+    %% Wait Bar
+    wait_bar = waitbar(0 , 'Mobile Node Moving Simulate');
+    set(wait_bar, 'name', 'Mobile Node Moving...');
+    wb = 50/length(1:input_settings.MN_N)
     %Initializing MN_DATA Values   
     for MN_INDEX = 1:input_settings.MN_N
            %random 1 - cAREA_N
@@ -52,6 +56,32 @@ function [MN_DATA] = MSN_RPM2(input_settings, AREA_DATA, MN_DATA_INIT)
            unifrnd(cCenter_y(MN_DATA_temp.VS_NODE(MN_INDEX).HOME) - input_settings.cAREA_Y(2)/2,...
                    cCenter_y(MN_DATA_temp.VS_NODE(MN_INDEX).HOME) + input_settings.cAREA_Y(2)/2);
            
+           %%用于传信部分的初始化
+           MN_DATA_temp.VS_NODE(MN_INDEX).MESSAGE(1).ID = MN_DATA_INIT.VS_NODE(MN_INDEX).MESSAGE(1).ID;
+
+           MN_DATA_temp.VS_NODE(MN_INDEX).MESSAGE(1).FROM = MN_DATA_INIT.VS_NODE(MN_INDEX).MESSAGE(1).FROM;
+
+           MN_DATA_temp.VS_NODE(MN_INDEX).MESSAGE(1).TO = MN_DATA_INIT.VS_NODE(MN_INDEX).MESSAGE(1).TO;
+
+           MN_DATA_temp.VS_NODE(MN_INDEX).MESSAGE(1).NUMBER_OF_FORWARDS = ...
+           MN_DATA_INIT.VS_NODE(MN_INDEX).MESSAGE(1).NUMBER_OF_FORWARDS;
+           MN_DATA_temp.VS_NODE(MN_INDEX).MESSAGE(1).TTL = ...
+           MN_DATA_INIT.VS_NODE(MN_INDEX).MESSAGE(1).TTL;
+           MN_DATA_temp.VS_NODE(MN_INDEX).MESSAGE(1).CREATION_TIME = ...
+           MN_DATA_INIT.VS_NODE(MN_INDEX).MESSAGE(1).CREATION_TIME;
+           MN_DATA_temp.VS_NODE(MN_INDEX).MESSAGE(1).RECEIPTION_TIME = ...
+           MN_DATA_INIT.VS_NODE(MN_INDEX).MESSAGE(1).RECEIPTION_TIME;
+
+           MN_DATA_temp.VS_NODE(MN_INDEX).RECEIVED_MESSAGE = ...
+           MN_DATA_INIT.VS_NODE(MN_INDEX).RECEIVED_MESSAGE;
+
+           MN_DATA_temp.VS_NODE(MN_INDEX).INSTANT_MESSAGE_COUNT = ...
+           MN_DATA_INIT.VS_NODE(MN_INDEX).INSTANT_MESSAGE_COUNT;
+           MN_DATA_temp.VS_NODE(MN_INDEX).INSTANT_BUFFER_COUNT = ...
+           MN_DATA_INIT.VS_NODE(MN_INDEX).INSTANT_BUFFER_COUNT;
+           MN_DATA_temp.VS_NODE(MN_INDEX).INSTANT_RECEIVED_COUNT = ...
+           MN_DATA_INIT.VS_NODE(MN_INDEX).INSTANT_RECEIVED_COUNT;
+
            %节点时间坐标
            MN_DATA_temp.VS_NODE(MN_INDEX).V_TIME = 1; 
            %移动次数标记
@@ -529,8 +559,11 @@ function [MN_DATA] = MSN_RPM2(input_settings, AREA_DATA, MN_DATA_INIT)
             D_t = find(MN_DATA_temp.VS_NODE(MN_INDEX).V_TIME == 0);
             MN_DATA_temp.VS_NODE(MN_INDEX).V_TIME(D_t) = [];
             MN_DATA_temp.VS_NODE(MN_INDEX).V_TIME = MN_DATA_temp.VS_NODE(MN_INDEX).V_TIME - 1;
+            str_bar = ['NO.' num2str(wb) ' Mobile Node Moving...']
+            waitbar(wb/50, wait_bar, str_bar);
+            wb = wb + 50/length(1:input_settings.MN_N)
     end 
-    
+    close(wait_bar);
     
 
     MN_DATA = MN_DATA_temp;

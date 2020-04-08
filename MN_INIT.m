@@ -13,6 +13,11 @@ function [MN_DATA_INIT] = MN_INTI(input_settings, AREA_DATA)
     %cCenter = AREA_DATA.cCenter;
 
     %用于初始化节点出生位置
+
+    %% Wait Bar
+    wait_bar = waitbar(0 , 'Mobile Node initialize');
+    set(wait_bar, 'name', 'Mobile Node initializing...');
+    wb = 50/length(1:input_settings.MN_N)
     for MN_INDEX = 1:input_settings.MN_N
         %节点随机出生的家
         MN_DATA_INIT_temp.VS_NODE(MN_INDEX).HOME = unidrnd(input_settings.cAREA_N);
@@ -23,6 +28,7 @@ function [MN_DATA_INIT] = MN_INTI(input_settings, AREA_DATA)
                 MN_DATA_INIT_temp.VS_NODE(MN_INDEX).P_community = unidrnd(input_settings.cAREA_N);%任务随机生成，当随机任务不为家时，循环结束
         end
 
+        %% 可能要直接赋值
         %设置节点的ID, FROM, TO, TTL, Number of forwards,Creation
         MN_DATA_INIT_temp.VS_NODE(MN_INDEX).MESSAGE(1).ID = num2str(MN_INDEX * 1000);
         MN_DATA_INIT_temp.VS_NODE(MN_INDEX).MESSAGE(1).FROM = MN_INDEX;
@@ -45,17 +51,21 @@ function [MN_DATA_INIT] = MN_INTI(input_settings, AREA_DATA)
         MN_DATA_INIT_temp.VS_NODE(MN_INDEX).RECEIVED_MESSAGE = ...
             struct('ID', {},...
                    'FROM', {},...
+                   'TO',{},...
                    'NUMBER_OF_FORWARDS', {},...
                    'TTL', {},...
                    'CREATION_TIME', {},...
                    'RECEIPTION_TIME', {}) ;
-        
-        
 
+        MN_DATA_INIT_temp.VS_NODE(MN_INDEX).INSTANT_MESSAGE_COUNT = [];
+        MN_DATA_INIT_temp.VS_NODE(MN_INDEX).INSTANT_BUFFER_COUNT = [];
+        MN_DATA_INIT_temp.VS_NODE(MN_INDEX).INSTANT_RECEIVED_COUNT = [];
 
-
-        
+    str_bar = ['NO.' num2str(wb) ' Mobile Node initializing...']
+    waitbar(wb/50, wait_bar, str_bar);
+    wb = wb + 50/length(1:input_settings.MN_N)
     end
+    close(wait_bar); 
 
     MN_DATA_INIT = MN_DATA_INIT_temp;
 end
