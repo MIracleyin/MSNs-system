@@ -57,15 +57,28 @@ function [MN_DATA_INIT] = MN_INTI(input_settings, AREA_DATA)
                    'CREATION_TIME', {},...
                    'RECEIPTION_TIME', {}) ;
 
+        MN_DATA_INIT_temp.VS_NODE(MN_INDEX).BUFFER =  ...
+            struct('ID', {},...
+                   'FROM', {},...
+                   'TO', {},...
+                   'NUMBER_OF_FORWARDS', {},...
+                   'TTL', {},...
+                   'CREATION_TIME', {},...
+                   'RECEIPTION_TIME', {}) ;
+
         MN_DATA_INIT_temp.VS_NODE(MN_INDEX).INSTANT_MESSAGE_COUNT = [];
         MN_DATA_INIT_temp.VS_NODE(MN_INDEX).INSTANT_BUFFER_COUNT = [];
         MN_DATA_INIT_temp.VS_NODE(MN_INDEX).INSTANT_RECEIVED_COUNT = [];
 
-    str_bar = ['NO.' num2str(wb) ' Mobile Node initializing...']
+    str_bar = ['NO.' num2str(wb) ' Mobile Node initializing...'];
     waitbar(wb/50, wait_bar, str_bar);
-    wb = wb + 50/length(1:input_settings.MN_N)
+    wb = wb + 50/length(1:input_settings.MN_N);
     end
     close(wait_bar); 
+
+    MN_DATA_INIT_temp.MESSAGES_COUNT = 1 * input_settings.MN_N;
+    MN_DATA_INIT_temp.RECEIVED_COUNT = 0;
+    MN_DATA_INIT_temp.BUFFERED_COUNT = 0;
 
     MN_DATA_INIT = MN_DATA_INIT_temp;
 end

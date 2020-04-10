@@ -36,7 +36,7 @@ function [MN_DATA] = MSN_RPM2(input_settings, AREA_DATA, MN_DATA_INIT)
     %% Wait Bar
     wait_bar = waitbar(0 , 'Mobile Node Moving Simulate');
     set(wait_bar, 'name', 'Mobile Node Moving...');
-    wb = 50/length(1:input_settings.MN_N)
+    wb = 50/length(1:input_settings.MN_N);
     %Initializing MN_DATA Values   
     for MN_INDEX = 1:input_settings.MN_N
            %random 1 - cAREA_N
@@ -559,12 +559,14 @@ function [MN_DATA] = MSN_RPM2(input_settings, AREA_DATA, MN_DATA_INIT)
             D_t = find(MN_DATA_temp.VS_NODE(MN_INDEX).V_TIME == 0);
             MN_DATA_temp.VS_NODE(MN_INDEX).V_TIME(D_t) = [];
             MN_DATA_temp.VS_NODE(MN_INDEX).V_TIME = MN_DATA_temp.VS_NODE(MN_INDEX).V_TIME - 1;
-            str_bar = ['NO.' num2str(wb) ' Mobile Node Moving...']
+            str_bar = ['NO.' num2str(wb) ' Mobile Node Moving...'];
             waitbar(wb/50, wait_bar, str_bar);
-            wb = wb + 50/length(1:input_settings.MN_N)
+            wb = wb + 50/length(1:input_settings.MN_N);
     end 
     close(wait_bar);
-    
+    MN_DATA_temp.MESSAGES_COUNT = MN_DATA_INIT.MESSAGES_COUNT;
+    MN_DATA_temp.RECEIVED_COUNT = MN_DATA_INIT.RECEIVED_COUNT;
+    MN_DATA_temp.BUFFERED_COUNT = MN_DATA_INIT.BUFFERED_COUNT;
 
     MN_DATA = MN_DATA_temp;
 end

@@ -19,9 +19,7 @@ global MN_DATA_temp; %global MN_DATA Index.
 MN_DATA_temp = MN_DATA;
 
 %创建节点相遇的字段
-wait_bar = waitbar(0 , 'Mobile Node Data calculate');
-set(wait_bar, 'name', 'Mobile Node Data calculating...');
-wb = 50/length(1:input_settings.MN_N)
+
 for MN_INDEX = 1 : input_settings.MN_N
     %记录相遇
     MN_DATA_temp.VS_NODE(MN_INDEX).MEET_ALLTIMES = 0; %用于记录节点相遇总次数
@@ -44,6 +42,7 @@ for MN_INDEX = 1 : input_settings.MN_N
 end
 
 %count = 0
+
 %对所有时间，计算移动节点相遇状况
 for time = 1 : 24 * 60 %考虑到抽样
     %对于每一个移动节点
@@ -175,10 +174,8 @@ for MN_INDEX_1 = 1 : input_settings.MN_N
         %结合仿真时长，可以结合8修正ageing效应
     end
 end
-str_bar = ['NO.' num2str(wb) ' Mobile Node calculating...']
-waitbar(wb/50, wait_bar, str_bar);
-wb = wb + 50/length(1:input_settings.MN_N)
+
 MN_DATA = MN_DATA_temp;
-close(wait_bar); 
+
 end
 %计算社交活跃度

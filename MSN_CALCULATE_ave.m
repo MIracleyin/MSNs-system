@@ -93,7 +93,7 @@ for MN_INDEX_1 = 1 : input_settings.MN_N
     end
     str_bar = ['NO.' num2str(wb) ' Mobile Node HOP3 calculating...']
     waitbar(wb/50, wait_bar, str_bar);
-    wb = wb + 50/length(1:input_settings.MN_N)
+    wb = wb + 50/length(1:input_settings.MN_N);
 end
 close(wait_bar);
 
