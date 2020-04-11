@@ -17,17 +17,17 @@ global message_index;
 time_step = input_settings.MN_T_interval;
 
 %将移动节点数据导入临时变量
-MN_DATA_temp = MN_DATA;
+MN_DATA_ROUTING_temp = MN_DATA;
 
-%用于记录路由信息序列 TODO：待改进描述
+%用于记录路由信息序列 T - 1440
 message_index = 1;
-%用于记录路由时间序列 TODO：待改进描述
+%用于记录路由时间序列 1 - 1440
 routing_time_index = 1;
 
 %初始化节点携带的信息
-MN_DATA_temp.BUFFERED_COUNT = 0;
-MN_DATA_temp.RECIVED_DIRECTLY = 0;
-MN_DATA_temp.RECIVED_FROM_BUFFERED = 0;
+MN_DATA_ROUTING_temp.BUFFERED_COUNT = 0;
+MN_DATA_ROUTING_temp.RECIVED_DIRECTLY = 0;
+MN_DATA_ROUTING_temp.RECIVED_FROM_BUFFERED = 0;
 
 %报告参数
 total_messages = [];         %储存在每一个时间间隔中的所有信息数
@@ -38,7 +38,7 @@ received_directly = [];      %储存在每一个时间间隔里的所有直接�
 received_from_buffered = []; %储存在每一个时间间隔里的所有从缓存获得的信息数
 report_timing = [];          %储存时间
 
-%
+%变量初始化为0，最后清除
 in_buffer = 0;
 in_message = 0;
 average_latency = 0;
@@ -51,20 +51,22 @@ for time = 0 : time_step : input_settings.sTIME + time_step
     for MN_INDEX_1 = 1 : input_settings.MN_INDEX_1 - 1 
         for MN_INDEX_2 = MN_INDEX_1 + 1 : input_settings.MN_N
 
-            temp_x1 = MN_DATA_temp.VS_NODE(MN_INDEX_1).X_POSTION(routing_time_index);
-            temp_y1 = MN_DATA_temp.VS_NODE(MN_INDEX_1).Y_POSTION(routing_time_index);
+            temp_x1 = MN_DATA_ROUTING_temp.VS_NODE(MN_INDEX_1).X_POSTION(routing_time_index);
+            temp_y1 = MN_DATA_ROUTING_temp.VS_NODE(MN_INDEX_1).Y_POSTION(routing_time_index);
 
-            temp_x2 = MN_DATA_temp.VS_NODE(MN_INDEX_2).X_POSTION(routing_time_index);
-            temp_y2 = MN_DATA_temp.VS_NODE(MN_INDEX_2).Y_POSTION(routing_time_index);
+            temp_x2 = MN_DATA_ROUTING_temp.VS_NODE(MN_INDEX_2).X_POSTION(routing_time_index);
+            temp_y2 = MN_DATA_ROUTING_temp.VS_NODE(MN_INDEX_2).Y_POSTION(routing_time_index);
 
             inter_distance = sqrt( (temp_x2 - temp_x1)^2 + (temp_y2 - temp_y1)^2 );
 
             %检查是否相遇
             if (inter_distance < input_settings.MN_R)
                 switch protocol
-
+                    %若相遇,则使用指定协议路由
+                    %论文的协议
                     case 'SCPR'
                         SCPR;
+                    %对照协议
                     case 'other'
                         SCPR;
                 end
@@ -157,10 +159,28 @@ for time = 0 : time_step : input_settings.sTIME + time_step
 
     end
 
-end
+end %仿真时间结束
 
+%清除
+in_buffer(1) = [];
+in_message(1) = [];
+average_latency(1) = [];
+metric_ratio(1) = [];
 
+% 将所有变量保存至Report中
+Report.total_messages = total_messages;
+Report.received_messages = received_messages;
+Report.buffered_messages = buffered_messages;
+Report.received_directly = received_directly;
+Report.received_from_buffered = received_from_buffered;
+Report.report_timing = report_timing;
 
+Report.in_buffer = in_buffer;
+Report.in_message = in_message;
+Report.average_latency = average_latency;
+Report.metric_ratio = metric_ratio;
+
+MN_DATA_temp =
 
 
 
