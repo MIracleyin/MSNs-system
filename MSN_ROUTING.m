@@ -136,11 +136,30 @@ for time = 0 : time_step : input_settings.sTIME + time_step
         end
     end
 
-    %每个信息间隔创建消息                                       % 时间不为 0  % 时间为一天的早8个小时
+    %每个信息间隔创建消息                                       % 时间不为 0  % 时间为一天的早8个小时TODO:待调试
     if ( rem(time, input_settings.MN_T_interval) < time_step) && time ~= 0 && time <= input_settings.sTIME/4
 
-        no_of_message_nodes = randi( [1 input_settings.MN_N], [1 1] );
+        %no_of_message_nodes = randi( [1 input_settings.MN_N], [1 1] );
         no_of_message_nodes = 10;
+
+        %生成一长度为1 * 50，数值在0 - 50之间的整数
+        message_nodes = randperm(input_settings.MN_N);
+        %截取1:10的长度
+        message_nodes = message_node(1 : no_of_message_nodes);
+        %若其中有为0的值，将其赋为50
+        message_nodes( message_nodes == 0 ) = input_settings.MN_N;
+
+        for MN_INDEX = 1 : input_settings.MN_N
+            create_new_message;
+        end
+
+        message_index = message_index + 1;
+
+    end
+
+end
+
+
 
 
 
