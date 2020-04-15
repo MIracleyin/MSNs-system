@@ -28,5 +28,5 @@ MN_DATA = MSN_RPM3(input_settings,AREA_DATA,MN_DATA_INIT,15);
 
 [MN_DATA_SOCIA ROUTING_TABLE] = MSN_CALCULATE2(input_settings,MN_DATA,10);
 
-
+[MN_DATA_ROUTING Report] = MSN_ROUTING(input_settings, MN_DATA, ROUTING_TABLE, 'SCPR');
 save('MSN_init_data');
