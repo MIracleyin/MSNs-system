@@ -493,20 +493,26 @@ function [MN_DATA] = MSN_RPM3(input_settings, AREA_DATA, MN_DATA_INIT, s_data_da
             for mark = days*1440 + 1 : 1 : MN_DATA_temp.VS_NODE(MN_INDEX).V_MARK
                 MN_DATA_temp.VS_NODE(MN_INDEX).X_POSITION(mark) = 0;
                 MN_DATA_temp.VS_NODE(MN_INDEX).Y_POSITION(mark) = 0;
+                MN_DATA_temp.VS_NODE(MN_INDEX).V_TIME(mark) = 0;
             end
+            %MN_DATA_temp.VS_NODE(MN_INDEX).V_MARK = 1;
             D_x = find(MN_DATA_temp.VS_NODE(MN_INDEX).X_POSITION == 0);
             MN_DATA_temp.VS_NODE(MN_INDEX).X_POSITION(D_x) = [];
             D_y = find(MN_DATA_temp.VS_NODE(MN_INDEX).Y_POSITION == 0);
             MN_DATA_temp.VS_NODE(MN_INDEX).Y_POSITION(D_y) = [];
             D_t = find(MN_DATA_temp.VS_NODE(MN_INDEX).V_TIME == 0);
             MN_DATA_temp.VS_NODE(MN_INDEX).V_TIME(D_t) = [];
-            MN_DATA_temp.VS_NODE(MN_INDEX).V_TIME = MN_DATA_temp.VS_NODE(MN_INDEX).V_TIME - 1;
+
+            %MN_DATA_temp.VS_NODE(MN_INDEX).V_TIME = MN_DATA_temp.VS_NODE(MN_INDEX).V_TIME - 1;
        end
        str_bar = ['NO.' num2str(wb) ' Simulate Day'];
        waitbar(wb/s_data_day, wait_bar, str_bar);
        wb = wb + 15/s_data_day;
     end
     close(wait_bar);
+    for MN_INDEX = 1 : input_settings.MN_N
+       MN_DATA_temp.VS_NODE(MN_INDEX).V_TIME = MN_DATA_temp.VS_NODE(MN_INDEX).V_TIME - 1;
+    end
     MN_DATA_temp.MESSAGES_COUNT = MN_DATA_INIT.MESSAGES_COUNT;
     MN_DATA_temp.RECEIVED_COUNT = MN_DATA_INIT.RECEIVED_COUNT;
     MN_DATA_temp.BUFFERED_COUNT = MN_DATA_INIT.BUFFERED_COUNT;

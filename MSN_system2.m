@@ -26,7 +26,7 @@ MN_DATA_INIT = MN_INIT(input_settings,AREA_DATA); %用于初始化移动节点�
 
 MN_DATA = MSN_RPM3(input_settings,AREA_DATA,MN_DATA_INIT,15); 
 
-MN_DATA_SOCIA = MSN_CALCULATE2(input_settings,MN_DATA,15);
+[MN_DATA_SOCIA ROUTING_TABLE] = MSN_CALCULATE2(input_settings,MN_DATA,10);
 
 
 save('MSN_init_data');

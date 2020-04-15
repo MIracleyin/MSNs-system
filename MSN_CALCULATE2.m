@@ -2,7 +2,7 @@
 %%%%%%%%%%%%%%%% MSN_CALCULATE.m %%%%%%%%%%%%%%%%%%%%
 % This script is used to calcualte the mobile of MNs%
 
-function [MN_DATA_SOCIA] = MSN_CALCULATE(input_settings,MN_DATA,s_data_day)
+function [MN_DATA_SOCIA ROUTING_TABLE] = MSN_CALCULATE(input_settings,MN_DATA,s_data_day)
 %myFun - Description
 %
 % Syntax: [MN_DATA] = myFun(input_settings,MN_DATA)
@@ -11,12 +11,12 @@ function [MN_DATA_SOCIA] = MSN_CALCULATE(input_settings,MN_DATA,s_data_day)
 %根据论文2，计算移动节点的社交属性
 
 clear MN_DATA_SOCIA_temp;
-%clear C_DATA_temp;
-
+clear ROUTING_TABLE;
 %The Role Playing Mobility Model.
 global MN_DATA_SOCIA_temp; %global MN_DATA Index.
 
 MN_DATA_SOCIA_temp = MN_DATA;
+%ROUTING_TABLE_temp = ROUTING_TABLE;
 
 %创建节点相遇的字段
 
@@ -47,7 +47,7 @@ end
 %waitbar
 wait_bar = waitbar(0, 'Meet Situation');
 set(wait_bar, 'name','Meeting...');
-wb = 24 * 60 * 15 / 24 * 60 * s_data_day;
+wb = 1;
 for time = 1 : 24 * 60 * s_data_day%考虑到抽样
     %对于每一个移动节点
     for MN_INDEX_1 = 1 : input_settings.MN_N
@@ -107,7 +107,7 @@ for time = 1 : 24 * 60 * s_data_day%考虑到抽样
                 else
                     %若节点1以及和节点2相遇过，为了防止相同的时间多次相遇（这不符合常理）
                     %若时间与最后一次相遇的时间不同
-                    if( (time * 60 == MN_DATA_SOCIA_temp.VS_NODE(MN_INDEX_2).SOCIAL_CONTACT(MN_INDEX_1).MEETING_TIME(end) ))
+                    if( (time * 60 ~= MN_DATA_SOCIA_temp.VS_NODE(MN_INDEX_2).SOCIAL_CONTACT(MN_INDEX_1).MEETING_TIME(end) ))
                         MN_DATA_SOCIA_temp.VS_NODE(MN_INDEX_2).MEET_ALLTIMES = ... %节点1总相遇次数+1
                         MN_DATA_SOCIA_temp.VS_NODE(MN_INDEX_2).MEET_ALLTIMES + 1;
                         %此时无需记录节点ID，因为已经有过记录
@@ -122,9 +122,9 @@ for time = 1 : 24 * 60 * s_data_day%考虑到抽样
             end
         end
     end
-    str_bar = ['The Meet' num2str(wb) 'Time'];
-    waitbar(wb/24*60*s_data_day, wait_bar, str_bar);
-    wb = wb + 24*60*s_data_day/24*60*s_data_day;
+    str_bar = ['The Meet ' num2str(wb) ' Time'];
+    waitbar(wb/(24 * 60 * s_data_day), wait_bar, str_bar);
+    wb = wb + (24*60*s_data_day)/(24*60*s_data_day);
 end
 close(wait_bar);
 
@@ -134,12 +134,12 @@ set(wait_bar,'name', 'Mobile Node Parameter Calculate' );
 wb = 50/input_settings.MN_N;
 for MN_INDEX_1 = 1 : input_settings.MN_N
     for MN_INDEX_2 =  1 : input_settings.MN_N
-        MN_DATA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).ENCOUNTER_PROBABILITY = ...
-        MN_DATA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).MEET_TIMES/...
-        MN_DATA_temp.VS_NODE(MN_INDEX_1).MEET_ALLTIMES;
-        %使用公式2
         %MN_DATA_SOCIA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).ENCOUNTER_PROBABILITY = ...
-        %MN_DATA_SOCIA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).MEET_TIMES / 1440 * s_data_day;%MEET_TINES/1440
+        %MN_DATA_SOCIA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).MEET_TIMES/...
+        %MN_DATA_SOCIA_temp.VS_NODE(MN_INDEX_1).MEET_ALLTIMES;
+        %使用公式2
+        MN_DATA_SOCIA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).ENCOUNTER_PROBABILITY = ...
+        MN_DATA_SOCIA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).MEET_TIMES / 28800;%MEET_TINES/1440
 
         %计算公式4,5 需要修正
         %如果相遇次数小于2，那么
@@ -175,12 +175,19 @@ for MN_INDEX_1 = 1 : input_settings.MN_N
             MN_DATA_SOCIA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).DELTA_T / ...
             (MN_DATA_SOCIA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).DELTA_T + ...
             MN_DATA_SOCIA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).S_DELTA_T)
+
+            if isnan(MN_DATA_SOCIA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).ENCOUNTER_REGULARITY)
+                MN_DATA_SOCIA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).ENCOUNTER_REGULARITY = 0;
+            end
         end
 
         %6
         MN_DATA_SOCIA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).DIRECT_PROBABILITY = ...
         MN_DATA_SOCIA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).ENCOUNTER_REGULARITY * ...
         MN_DATA_SOCIA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).ENCOUNTER_PROBABILITY;
+
+        MN_DATA_SOCIA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).DIRECT_PROBABILITY = ...
+        MN_DATA_SOCIA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).DIRECT_PROBABILITY * 15/10;%ageing
         %结合仿真时长，可以结合8修正ageing效应
     end
     str_bar = ['NO.' num2str(wb) ' Mobile Node'];
@@ -188,7 +195,124 @@ for MN_INDEX_1 = 1 : input_settings.MN_N
     wb = wb + 50/input_settings.MN_N;
 end
 close(wait_bar);
+
+%记录间接概率，使用DIRECT_PROBABILITY_AVE计算
+%MN_DATA_SOCIA_temp(2) = MN_DATA_SOCIA_temp %保存路由表
+%HOP1
+%{
+for MN_INDEX_1 = 1 : input_settings.MN_N %源节点MN1
+    for MN_INDEX_2 = 1:input_settings.MN_N %目标节点MN2
+        MN_DATA_SOCIA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).TRANS_PROBABILITY_HOP1 = ...
+        MN_DATA_SOCIA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).DIRECT_PROBABILITY;
+        if isnan(MN_DATA_SOCIA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).TRANS_PROBABILITY_HOP1)
+            MN_DATA_SOCIA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).TRANS_PROBABILITY_HOP1 = 0;
+        end
+        %保存为路由表，方便调用
+        ROUTING_TABLE_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).TRANS_PROBABILITY_HOP1 = ...
+        MN_DATA_SOCIA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).TRANS_PROBABILITY_HOP1;
+    end
+end
+
+%HOP2
+for MN_INDEX_1 = 1 : input_settings.MN_N %源节点MN1
+    for MN_INDEX_2 = 1:input_settings.MN_N %目标节点MN2
+        for MN_INDEX_X = 1 : input_settings.MN_N %任取一中间节点
+            if (MN_INDEX_X ~= MN_INDEX_1) & (MN_INDEX_X ~= MN_INDEX_2) %选取一个除了节点1和节点2以外的节点
+                %节点1到节点2二跳传递概率为 节点1直接传递给节点x的概率*节点x直接传给节点2的概率
+                MN_DATA_SOCIA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).TRANS_PROBABILITY_HOP2 = ...
+                MN_DATA_SOCIA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_X).DIRECT_PROBABILITY * ...
+                MN_DATA_SOCIA_temp.VS_NODE(MN_INDEX_X).SOCIAL_CONTACT(MN_INDEX_2).DIRECT_PROBABILITY;
+            else
+                %待修改，可能有问题
+                MN_DATA_SOCIA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).TRANS_PROBABILITY_HOP2 = 0;
+            end
+            if isnan(MN_DATA_SOCIA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).TRANS_PROBABILITY_HOP2)
+                MN_DATA_SOCIA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).TRANS_PROBABILITY_HOP2 = 0;
+            end
+            ROUTING_TABLE_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).TRANS_PROBABILITY_HOP2 = ...
+            MN_DATA_SOCIA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).TRANS_PROBABILITY_HOP2;
+        end
+    end
+end
+
+%HOP3
+wait_bar = waitbar(0 , 'Mobile Node HOP3 calculate');
+set(wait_bar, 'name', 'Mobile Node HOP3 calculating...');
+wb = 50/length(1:input_settings.MN_N)
+for MN_INDEX_1 = 1 : input_settings.MN_N%源节点MN1
+    for MN_INDEX_2 = 1 : input_settings.MN_N%目标节点MN2
+        for MN_INDEX_X1 = 1 : input_settings.MN_N%任取一中间节点1
+            for MN_INDEX_X2 = 1 : input_settings.MN_N%任取一中间节点2
+                if (MN_INDEX_X1 ~= MN_INDEX_1) & (MN_INDEX_X1 ~= MN_INDEX_2) & (MN_INDEX_X2 ~= MN_INDEX_X1) & (MN_INDEX_X2 ~= MN_INDEX_2)
+                    MN_DATA_SOCIA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).TRANS_PROBABILITY_HOP3 = ...
+                    MN_DATA_SOCIA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_X1).DIRECT_PROBABILITY * ...
+                    MN_DATA_SOCIA_temp.VS_NODE(MN_INDEX_X1).SOCIAL_CONTACT(MN_INDEX_X2).DIRECT_PROBABILITY * ...
+                    MN_DATA_SOCIA_temp.VS_NODE(MN_INDEX_X2).SOCIAL_CONTACT(MN_INDEX_2).DIRECT_PROBABILITY;
+                else
+                    MN_DATA_SOCIA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).TRANS_PROBABILITY_HOP3 = 0;
+                end
+                if isnan(MN_DATA_SOCIA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).TRANS_PROBABILITY_HOP3)
+                    MN_DATA_SOCIA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).TRANS_PROBABILITY_HOP3 = 0;
+                end
+                ROUTING_TABLE_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).TRANS_PROBABILITY_HOP3 = ...
+                MN_DATA_SOCIA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).TRANS_PROBABILITY_HOP3;
+            end
+        end
+    end
+    str_bar = ['NO.' num2str(wb) ' Mobile Node HOP3 calculating...']
+    waitbar(wb/50, wait_bar, str_bar);
+    wb = wb + 50/length(1:input_settings.MN_N);
+end
+close(wait_bar);
+%}
+
+%HOP3
+wait_bar = waitbar(0 , 'Mobile Node HOP calculate');
+set(wait_bar, 'name', 'Mobile Node HOP calculating...');
+wb = 50/length(1:input_settings.MN_N);
+for MN_INDEX_1 = 1 : input_settings.MN_N%源节点MN1
+    for MN_INDEX_2 = 1 : input_settings.MN_N%目标节点MN2
+        for MN_INDEX_X1 = 1 : input_settings.MN_N%任取一中间节点1
+            for MN_INDEX_X2 = 1 : input_settings.MN_N%任取一中间节点2
+                if (MN_INDEX_X1 ~= MN_INDEX_1) & (MN_INDEX_X1 ~= MN_INDEX_2) & (MN_INDEX_X2 ~= MN_INDEX_X1) & (MN_INDEX_X2 ~= MN_INDEX_2)
+                    MN_DATA_SOCIA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).TRANS_PROBABILITY_HOP3 = ...
+                    MN_DATA_SOCIA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_X1).DIRECT_PROBABILITY * ...
+                    MN_DATA_SOCIA_temp.VS_NODE(MN_INDEX_X1).SOCIAL_CONTACT(MN_INDEX_X2).DIRECT_PROBABILITY * ...
+                    MN_DATA_SOCIA_temp.VS_NODE(MN_INDEX_X2).SOCIAL_CONTACT(MN_INDEX_2).DIRECT_PROBABILITY;
+                    if isnan(MN_DATA_SOCIA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).TRANS_PROBABILITY_HOP3)
+                        MN_DATA_SOCIA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).TRANS_PROBABILITY_HOP3 = 0;
+                    end
+                    ROUTING_TABLE_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).TRANS_PROBABILITY_HOP3 = ...
+                    MN_DATA_SOCIA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).TRANS_PROBABILITY_HOP3;
+                elseif (MN_INDEX_X1 ~= MN_INDEX_1) & (MN_INDEX_X1 ~= MN_INDEX_2)
+                    MN_DATA_SOCIA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).TRANS_PROBABILITY_HOP2 = ...
+                    MN_DATA_SOCIA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_X1).DIRECT_PROBABILITY * ...
+                    MN_DATA_SOCIA_temp.VS_NODE(MN_INDEX_X1).SOCIAL_CONTACT(MN_INDEX_2).DIRECT_PROBABILITY;
+                    if isnan(MN_DATA_SOCIA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).TRANS_PROBABILITY_HOP2)
+                        MN_DATA_SOCIA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).TRANS_PROBABILITY_HOP2 = 0;
+                    end
+                    ROUTING_TABLE_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).TRANS_PROBABILITY_HOP2 = ...
+                    MN_DATA_SOCIA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).TRANS_PROBABILITY_HOP2;
+                else
+                    MN_DATA_SOCIA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).TRANS_PROBABILITY_HOP1 = ...
+                    MN_DATA_SOCIA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).DIRECT_PROBABILITY;
+                    if isnan(MN_DATA_SOCIA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).TRANS_PROBABILITY_HOP1)
+                        MN_DATA_SOCIA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).TRANS_PROBABILITY_HOP1 = 0;
+                    end
+                    ROUTING_TABLE_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).TRANS_PROBABILITY_HOP1 = ...
+                    MN_DATA_SOCIA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).TRANS_PROBABILITY_HOP1;
+                end
+            end
+        end
+    end
+    str_bar = ['NO.' num2str(wb) ' Mobile Node HOP calculating...'];
+    waitbar(wb/50, wait_bar, str_bar);
+    wb = wb + 50/length(1:input_settings.MN_N);
+end
+close(wait_bar);
+
 MN_DATA_SOCIA = MN_DATA_SOCIA_temp;
+ROUTING_TABLE = ROUTING_TABLE_temp;
 
 end
 %计算社交活跃度
