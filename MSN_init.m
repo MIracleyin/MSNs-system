@@ -41,6 +41,7 @@ T_arrive = [7 9] * 60 * 60; %(s) 7-9AM 7:00-9:00
 T_depart = [16 18] * 60 * 60; %(s) 4-6PM 16:00-18:00
 T_pause = [30 180] * 60; %(s) 30-180min for pause
 T_interval = 60; %(s) an interval for update
+M_interval = 120;
 
 % Add all system settings into struct intput_settings
 %'MN_L_prefer',L_prefer%the occurrence probabilities reflected by the preference
@@ -62,5 +63,6 @@ input_settings = struct('sTIME',T,... %Time range of Simulation仿真总时长
                         'MN_T_arrive',T_arrive,...
                         'MN_T_depart',T_depart,...
                         'MN_T_pause',T_pause,...
-                        'MN_T_interval',T_interval);
+                        'MN_T_interval',T_interval,...
+                        'MSG_T_interval',M_interval);
 

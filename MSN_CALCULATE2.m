@@ -2,7 +2,7 @@
 %%%%%%%%%%%%%%%% MSN_CALCULATE.m %%%%%%%%%%%%%%%%%%%%
 % This script is used to calcualte the mobile of MNs%
 
-function [MN_DATA_SOCIA ROUTING_TABLE] = MSN_CALCULATE(input_settings,MN_DATA,s_data_day)
+function [MN_DATA_SOCIA ROUTING_TABLE] = MSN_CALCULATE(input_settings,MN_DATA,s_data_day,ageing)
 %myFun - Description
 %
 % Syntax: [MN_DATA] = myFun(input_settings,MN_DATA)
@@ -187,7 +187,7 @@ for MN_INDEX_1 = 1 : input_settings.MN_N
         MN_DATA_SOCIA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).ENCOUNTER_PROBABILITY;
 
         MN_DATA_SOCIA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).DIRECT_PROBABILITY = ...
-        MN_DATA_SOCIA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).DIRECT_PROBABILITY * 15/10;%ageing
+        MN_DATA_SOCIA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).DIRECT_PROBABILITY * ageing;%ageing
         %结合仿真时长，可以结合8修正ageing效应
     end
     str_bar = ['NO.' num2str(wb) ' Mobile Node'];

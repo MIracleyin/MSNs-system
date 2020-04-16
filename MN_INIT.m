@@ -2,7 +2,7 @@
 %%%%%%%%%%%%%%%% MN_init.m %%%%%%%%%%%%%%%%%%%%%%%%%
 % This script is used to initialize the MN DATA %%%%
 
-function [MN_DATA_INIT] = MN_INTI(input_settings, AREA_DATA)
+function [MN_DATA_INIT] = MN_INTI(input_settings, AREA_DATA,s_data_day)
 
     clear MN_DATA_INIT_temp;
 
@@ -11,7 +11,7 @@ function [MN_DATA_INIT] = MN_INTI(input_settings, AREA_DATA)
     %cCenter_x = AREA_DATA.cCenter_x;
     %cCenter_y = AREA_DATA.cCenter_y;
     %cCenter = AREA_DATA.cCenter;
-
+    digit_count = numel( num2str(input_settings.sTIME * s_data_day /input_settings.MSG_T_interval) );
     %用于初始化节点出生位置
 
     %% Wait Bar
@@ -69,16 +69,17 @@ function [MN_DATA_INIT] = MN_INTI(input_settings, AREA_DATA)
         MN_DATA_INIT_temp.VS_NODE(MN_INDEX).INSTANT_MESSAGE_COUNT = [];
         MN_DATA_INIT_temp.VS_NODE(MN_INDEX).INSTANT_BUFFER_COUNT = [];
         MN_DATA_INIT_temp.VS_NODE(MN_INDEX).INSTANT_RECEIVED_COUNT = [];
-
-    str_bar = ['NO.' num2str(wb) ' Mobile Node initializing...'];
-    waitbar(wb/50, wait_bar, str_bar);
-    wb = wb + 50/length(1:input_settings.MN_N);
+    
+        str_bar = ['NO.' num2str(wb) ' Mobile Node initializing...'];
+        waitbar(wb/50, wait_bar, str_bar);
+        wb = wb + 50/length(1:input_settings.MN_N);
     end
     close(wait_bar); 
 
     MN_DATA_INIT_temp.MESSAGES_COUNT = 1 * input_settings.MN_N;
     MN_DATA_INIT_temp.RECEIVED_COUNT = 0;
     MN_DATA_INIT_temp.BUFFERED_COUNT = 0;
+    MN_DATA_INIT_temp.ID_DIGIT_COUNT = digit_count;
 
     MN_DATA_INIT = MN_DATA_INIT_temp;
 end

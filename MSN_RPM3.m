@@ -46,6 +46,8 @@ function [MN_DATA] = MSN_RPM3(input_settings, AREA_DATA, MN_DATA_INIT, s_data_da
 
        MN_DATA_temp.VS_NODE(MN_INDEX).RECEIVED_MESSAGE = MN_DATA_INIT.VS_NODE(MN_INDEX).RECEIVED_MESSAGE;
 
+       MN_DATA_temp.VS_NODE(MN_INDEX).BUFFER = MN_DATA_INIT.VS_NODE(MN_INDEX).BUFFER;
+
        MN_DATA_temp.VS_NODE(MN_INDEX).INSTANT_MESSAGE_COUNT = MN_DATA_INIT.VS_NODE(MN_INDEX).INSTANT_MESSAGE_COUNT;
        MN_DATA_temp.VS_NODE(MN_INDEX).INSTANT_BUFFER_COUNT = MN_DATA_INIT.VS_NODE(MN_INDEX).INSTANT_BUFFER_COUNT;
        MN_DATA_temp.VS_NODE(MN_INDEX).INSTANT_RECEIVED_COUNT = MN_DATA_INIT.VS_NODE(MN_INDEX).INSTANT_RECEIVED_COUNT;
@@ -65,7 +67,7 @@ function [MN_DATA] = MSN_RPM3(input_settings, AREA_DATA, MN_DATA_INIT, s_data_da
     %waitbar
     wait_bar = waitbar(0, 'Simulate Move');
     set(wait_bar, 'name', 'Simulate Moving...');
-    wb = 15/s_data_day;
+    wb = 1;
     for days = 1 : s_data_day
        for MN_INDEX = 1:input_settings.MN_N
            %每一天 节点如何运动
@@ -507,7 +509,7 @@ function [MN_DATA] = MSN_RPM3(input_settings, AREA_DATA, MN_DATA_INIT, s_data_da
        end
        str_bar = ['NO.' num2str(wb) ' Simulate Day'];
        waitbar(wb/s_data_day, wait_bar, str_bar);
-       wb = wb + 15/s_data_day;
+       wb = wb + 1;
     end
     close(wait_bar);
     for MN_INDEX = 1 : input_settings.MN_N
@@ -516,6 +518,7 @@ function [MN_DATA] = MSN_RPM3(input_settings, AREA_DATA, MN_DATA_INIT, s_data_da
     MN_DATA_temp.MESSAGES_COUNT = MN_DATA_INIT.MESSAGES_COUNT;
     MN_DATA_temp.RECEIVED_COUNT = MN_DATA_INIT.RECEIVED_COUNT;
     MN_DATA_temp.BUFFERED_COUNT = MN_DATA_INIT.BUFFERED_COUNT;
+    MN_DATA_temp.ID_DIGIT_COUNT = MN_DATA_INIT.ID_DIGIT_COUNT;
 
     MN_DATA = MN_DATA_temp;
 end   

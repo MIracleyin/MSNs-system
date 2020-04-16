@@ -20,9 +20,9 @@ MN_DATA_ROUTING_temp.VS_NODE(MN_INDEX).MESSAGE(number_of_messages+1).FROM = MN_I
 %信息是否接受
 message_receipt_while = true;
 %当信息可以接受时
-while message_receipt_whilez
+while message_receipt_while
     %随机生成一个1-50的值
-    receipt_index_temp = randi([1 input_settings.NUMBER_OF_NODES], [1 1] );
+    receipt_index_temp = randi([1 input_settings.MN_N], [1 1] );
     %如果这个值不是其本身
     if receipt_index_temp ~= MN_INDEX
         %那么就将该信息发向这个目标节点
