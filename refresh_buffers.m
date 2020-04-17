@@ -9,8 +9,8 @@ buffer_y = [];
 %获取节点x,y的信息ID
 % Get messages IDs of nodes x and y
 %如果节点x的长度大于等于1，那么读取该信息ID
-if length(MN_DATA_ROUTING_temp.VS_NODE(MN_INTEX_1).MESSAGE) >= 1
-    messages_x = [MN_DATA_ROUTING_temp.VS_NODE(MN_INTEX_1).MESSAGE(:).TO];
+if length(MN_DATA_ROUTING_temp.VS_NODE(MN_INDEX_1).MESSAGE) >= 1
+    messages_x = [MN_DATA_ROUTING_temp.VS_NODE(MN_INDEX_1).MESSAGE(:).TO];
 end
 
 %如果节点y的长度大于等于1，那么读取该信息ID
@@ -18,13 +18,12 @@ if length(MN_DATA_ROUTING_temp.VS_NODE(MN_INDEX_2).MESSAGE) >= 1
     messages_y = [MN_DATA_ROUTING_temp.VS_NODE(MN_INDEX_2).MESSAGE(:).TO];
 end
 
-
 % Get buffered messages IDs of nodes x and y
 %获取缓存中的信息ID
-if length(MN_DATA_ROUTING_temp.VS_NODE(index1).BUFFER) >= 1
-    buffer_x  = [MN_DATA_ROUTING_temp.VS_NODE(MN_INTEX_1).BUFFER(:).TO];
+if length(MN_DATA_ROUTING_temp.VS_NODE(MN_INDEX_1).BUFFER) >= 1
+    buffer_x  = [MN_DATA_ROUTING_temp.VS_NODE(MN_INDEX_1).BUFFER(:).TO];
 end
 
-if length(MN_DATA_ROUTING_temp.VS_NODE(index2).BUFFER) >= 1
+if length(MN_DATA_ROUTING_temp.VS_NODE(MN_INDEX_2).BUFFER) >= 1
     buffer_y = [MN_DATA_ROUTING_temp.VS_NODE(MN_INDEX_2).BUFFER(:).TO];
 end

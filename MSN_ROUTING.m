@@ -2,7 +2,7 @@
 %%%%%%%%%%%%%%%% MSN_CALCULATE.m %%%%%%%%%%%%%%%%%%%%
 % This script is used to routing all MN's message %%%
 
-function [MN_DATA_ROUTING Report] = MSN_ROUTING(input_settings, MN_DATA, routing_table, protocol, s_data_day)
+function [MN_DATA_ROUTING, Report] = MSN_ROUTING(input_settings, MN_DATA, routing_table, protocol, s_data_day)
 %MSN_ROUTING - Description
 %
 % Syntax: [MN_DATA_ROUTING Report] = MSN_ROUTING(input_settings, MN_DATA, routing_table, protocol)
@@ -129,7 +129,7 @@ for time = 60 : time_step : time_end%
             inMessages = inMessages + length(MN_DATA_ROUTING_temp.VS_NODE(MN_INDEX).MESSAGE);
 
             %获取接收信息的间隔以及信息长度
-            [reception_delay(MN_INDEX) packets_received(MN_INDEX)] = ...
+            [reception_delay(MN_INDEX), packets_received(MN_INDEX)] = ...
             get_reception_duration(MN_DATA_ROUTING_temp.VS_NODE(MN_INDEX).RECEIVED_MESSAGE);
             %用于计算信息的公制
             metric(MN_INDEX) = get_metric_value(MN_DATA_ROUTING_temp.VS_NODE(MN_INDEX).RECEIVED_MESSAGE);

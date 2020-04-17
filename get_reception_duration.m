@@ -2,7 +2,7 @@
 % buffer RECEIVED_MESSAGE And packets_received the count of messages in the 
 % buffer.
 
-function [ reception_delay packets_received ] = get_reception_duration(RECEIVED_MESSAGE)
+function [ reception_delay, packets_received ] = get_reception_duration(RECEIVED_MESSAGE)
          % 接收时延后      数据包长度
 %先设接收时延为0
 reception_delay = 0;

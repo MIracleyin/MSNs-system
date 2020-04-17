@@ -16,7 +16,7 @@ function [MN_DATA] = MSN_RPM3(input_settings, AREA_DATA, MN_DATA_INIT, s_data_da
 
     cCenter_x = AREA_DATA.cCenter_x;
     cCenter_y = AREA_DATA.cCenter_y;
-    cCenter = AREA_DATA.cCenter;
+    %cCenter = AREA_DATA.cCenter;
     
     %用于节点初始化
     for MN_INDEX = 1:input_settings.MN_N
@@ -103,7 +103,7 @@ function [MN_DATA] = MSN_RPM3(input_settings, AREA_DATA, MN_DATA_INIT, s_data_da
            MN_DATA_temp.VS_NODE(MN_INDEX).P_T_arrive - MN_DATA_temp.VS_NODE(MN_INDEX).P_T_trace;
     
            %移动节点开始工作以后的初角度
-           MN_DATA_temp.VS_NODE(MN_INDEX).MVOING_DIRECTION = unifrnd(input_settings.MN_A_inside(1),input_settings.MN_A_inside(2))
+           MN_DATA_temp.VS_NODE(MN_INDEX).MVOING_DIRECTION = unifrnd(input_settings.MN_A_inside(1),input_settings.MN_A_inside(2));
            %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
            %%%%%%%%%%%%%%%MOVE1 节点在家中等待出发%%%%%%%%%%%%%%%%%%
            time_go = 0; %等待开始时间
@@ -154,7 +154,7 @@ function [MN_DATA] = MSN_RPM3(input_settings, AREA_DATA, MN_DATA_INIT, s_data_da
                   elseif (new_x < 0)
                          new_x = 1;
                   end
-                  MN_DATA_temp.VS_NODE(MN_INDEX).X_POSITION(end + 1) = new_x
+                  MN_DATA_temp.VS_NODE(MN_INDEX).X_POSITION(end + 1) = new_x;
     
                   %更新上一次节点y坐标，每次更新，y方向增量 * y方向距离
                   new_y = MN_DATA_temp.VS_NODE(MN_INDEX).Y_POSITION(end) + ...
@@ -164,7 +164,7 @@ function [MN_DATA] = MSN_RPM3(input_settings, AREA_DATA, MN_DATA_INIT, s_data_da
                   elseif (new_y < 0)
                          new_y = 1;
                   end
-                  MN_DATA_temp.VS_NODE(MN_INDEX).Y_POSITION(end + 1) = new_y
+                  MN_DATA_temp.VS_NODE(MN_INDEX).Y_POSITION(end + 1) = new_y;
            end
            
            %%节点到目标通信区中心
@@ -294,7 +294,7 @@ function [MN_DATA] = MSN_RPM3(input_settings, AREA_DATA, MN_DATA_INIT, s_data_da
            %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
            %%%%%%%%%%%%%%%MOVE4 WPM %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
            Sub_community_temp = MN_DATA_temp.VS_NODE(MN_INDEX).HOME; %将临时子任务节点设为家
-           while ( (Sub_community_temp == MN_DATA_temp.VS_NODE(MN_INDEX).HOME) |... %因此必定进循环
+           while ( (Sub_community_temp == MN_DATA_temp.VS_NODE(MN_INDEX).HOME) ||... %因此必定进循环
                    (Sub_community_temp == MN_DATA_temp.VS_NODE(MN_INDEX).P_community) )
                    %随机生成新的子任务节点，不满足条件则继续生成
                    Sub_community_temp = unidrnd(input_settings.cAREA_N);

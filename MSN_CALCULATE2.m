@@ -2,7 +2,7 @@
 %%%%%%%%%%%%%%%% MSN_CALCULATE.m %%%%%%%%%%%%%%%%%%%%
 % This script is used to calcualte the mobile of MNs%
 
-function [MN_DATA_SOCIA ROUTING_TABLE] = MSN_CALCULATE(input_settings,MN_DATA,s_data_day,ageing)
+function [MN_DATA_SOCIA,ROUTING_TABLE] = MSN_CALCULATE2(input_settings,MN_DATA,s_data_day,ageing)
 %myFun - Description
 %
 % Syntax: [MN_DATA] = myFun(input_settings,MN_DATA)
@@ -174,7 +174,7 @@ for MN_INDEX_1 = 1 : input_settings.MN_N
             MN_DATA_SOCIA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).ENCOUNTER_REGULARITY = ...
             MN_DATA_SOCIA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).DELTA_T / ...
             (MN_DATA_SOCIA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).DELTA_T + ...
-            MN_DATA_SOCIA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).S_DELTA_T)
+            MN_DATA_SOCIA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).S_DELTA_T);
 
             if isnan(MN_DATA_SOCIA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).ENCOUNTER_REGULARITY)
                 MN_DATA_SOCIA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).ENCOUNTER_REGULARITY = 0;
@@ -274,7 +274,7 @@ for MN_INDEX_1 = 1 : input_settings.MN_N%源节点MN1
     for MN_INDEX_2 = 1 : input_settings.MN_N%目标节点MN2
         for MN_INDEX_X1 = 1 : input_settings.MN_N%任取一中间节点1
             for MN_INDEX_X2 = 1 : input_settings.MN_N%任取一中间节点2
-                if (MN_INDEX_X1 ~= MN_INDEX_1) & (MN_INDEX_X1 ~= MN_INDEX_2) & (MN_INDEX_X2 ~= MN_INDEX_X1) & (MN_INDEX_X2 ~= MN_INDEX_2)
+                if (MN_INDEX_X1 ~= MN_INDEX_1) && (MN_INDEX_X1 ~= MN_INDEX_2) && (MN_INDEX_X2 ~= MN_INDEX_X1) && (MN_INDEX_X2 ~= MN_INDEX_2)
                     MN_DATA_SOCIA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).TRANS_PROBABILITY_HOP3 = ...
                     MN_DATA_SOCIA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_X1).DIRECT_PROBABILITY * ...
                     MN_DATA_SOCIA_temp.VS_NODE(MN_INDEX_X1).SOCIAL_CONTACT(MN_INDEX_X2).DIRECT_PROBABILITY * ...
@@ -284,7 +284,7 @@ for MN_INDEX_1 = 1 : input_settings.MN_N%源节点MN1
                     end
                     ROUTING_TABLE_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).TRANS_PROBABILITY_HOP3 = ...
                     MN_DATA_SOCIA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).TRANS_PROBABILITY_HOP3;
-                elseif (MN_INDEX_X1 ~= MN_INDEX_1) & (MN_INDEX_X1 ~= MN_INDEX_2)
+                elseif (MN_INDEX_X1 ~= MN_INDEX_1) && (MN_INDEX_X1 ~= MN_INDEX_2)
                     MN_DATA_SOCIA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).TRANS_PROBABILITY_HOP2 = ...
                     MN_DATA_SOCIA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_X1).DIRECT_PROBABILITY * ...
                     MN_DATA_SOCIA_temp.VS_NODE(MN_INDEX_X1).SOCIAL_CONTACT(MN_INDEX_2).DIRECT_PROBABILITY;

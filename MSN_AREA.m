@@ -14,10 +14,8 @@ function [AREA_DATA] = MSN_AREA(input_settings)
     b_y = [(input_settings.sMAP_Y(1) + input_settings.cAREA_Y(2)/2),...
            (input_settings.sMAP_Y(2) - input_settings.cAREA_Y(2)/2)];
     
-    cCenter_x = 0;
-    cCenter_y = 0;
     cCenter_x_temp = b_x(1) + (b_x(2)-b_x(1)) * rand(input_settings.cAREA_N,1);
-    cCenter_y_temp = b_x(1) + (b_x(2)-b_x(1)) * rand(input_settings.cAREA_N,1);
+    cCenter_y_temp = b_y(1) + (b_y(2)-b_y(1)) * rand(input_settings.cAREA_N,1);
     cCenter_temp = [cCenter_x_temp cCenter_y_temp];
     
     AREA_DATA.cCenter_x = cCenter_x_temp;

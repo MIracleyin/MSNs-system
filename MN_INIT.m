@@ -2,22 +2,19 @@
 %%%%%%%%%%%%%%%% MN_init.m %%%%%%%%%%%%%%%%%%%%%%%%%
 % This script is used to initialize the MN DATA %%%%
 
-function [MN_DATA_INIT] = MN_INTI(input_settings, AREA_DATA,s_data_day)
+function [MN_DATA_INIT] = MN_INTI(input_settings, s_data_day)
 
     clear MN_DATA_INIT_temp;
 
     global MN_DATA_INIT_temp;
 
-    %cCenter_x = AREA_DATA.cCenter_x;
-    %cCenter_y = AREA_DATA.cCenter_y;
-    %cCenter = AREA_DATA.cCenter;
     digit_count = numel( num2str(input_settings.sTIME * s_data_day /input_settings.MSG_T_interval) );
     %用于初始化节点出生位置
 
     %% Wait Bar
     wait_bar = waitbar(0 , 'Mobile Node initialize');
     set(wait_bar, 'name', 'Mobile Node initializing...');
-    wb = 50/length(1:input_settings.MN_N)
+    wb = 50/length(1:input_settings.MN_N);
     for MN_INDEX = 1:input_settings.MN_N
         %节点随机出生的家
         MN_DATA_INIT_temp.VS_NODE(MN_INDEX).HOME = unidrnd(input_settings.cAREA_N);

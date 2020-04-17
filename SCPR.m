@@ -6,22 +6,22 @@
 % SCPR social contact probability protocol
 
 %% 获取信息并缓存信息 目标地址
-message_x = [];
-message_y = [];
+message_x = []; %messages_x = [MN_DATA_ROUTING_temp.VS_NODE(MN_INTEX_1).MESSAGE(:).TO]
+message_y = []; %messages_y = [MN_DATA_ROUTING_temp.VS_NODE(MN_INDEX_2).MESSAGE(:).TO]
 
-buffer_x = [];
-buffer_y = [];
+buffer_x = []; %[MN_DATA_ROUTING_temp.VS_NODE(MN_INTEX_1).BUFFER(:).TO]
+buffer_y = []; %[MN_DATA_ROUTING_temp.VS_NODE(MN_INDEX_2).BUFFER(:).TO]
 
 %刷新信息和缓存，同时读取信息和缓存
 refresh_buffers;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%% 源节点与目标节点直接相遇的状况
+%%% 源节点与目标节点直接相遇的状况 首先完成直接传递
 %%1. 节点2是节点1的传信目标 不存入buffer
 if sum ( message_x == MN_INDEX_2 ) >= 1
-    % 节点1向节点2发送信息
+    % 节点1的信息保存至节点2信息的「接收信息」中
     MN_DATA_ROURTING_temp.VS_NODE(MN_INDEX_2).RECEIVED_MESSAGE( end + 1: end + sum(message_x == MN_INDEX_2)) = ...
-    MN_DATA_ROURTING_temp.VS_NODE(MN_INDEX_1).MESSAGE(message_x == MN_INDEX_2) %
+    MN_DATA_ROURTING_temp.VS_NODE(MN_INDEX_1).MESSAGE(message_x == MN_INDEX_2); %
     %
     for adding_time_index = 0 : sum(message_x == MN_INDEX_2) - 1
         %记录信息接收的时间
@@ -41,7 +41,7 @@ end
 if sum(buffer_x == MN_INDEX_2) >= 1
     % 节点1缓存向节点2发送信息
     MN_DATA_ROURTING_temp.VS_NODE(MN_INDEX_2).RECEIVED_MESSAGE(end + 1:end + sum( buffer_x == MN_INDEX_2)) = ...
-    MN_DATA_ROURTING_temp.VS_NODE(MN_INDEX_1).BUFFER(buffer_x == MN_INDEX_2)
+    MN_DATA_ROURTING_temp.VS_NODE(MN_INDEX_1).BUFFER(buffer_x == MN_INDEX_2);
 
     for adding_time_index = 0 : sum(buffer_x == MN_INDEX_2) - 1
         MN_DATA_ROURTING_temp.VS_NODE(MN_INDEX_2).RECEIVED_MESSAGE(end - adding_time_index).RECEIPTION_TIME = time;
@@ -101,6 +101,7 @@ end
 %%%依靠中间节点传递信息
 %%节点1信息传至节点2缓存
 %节点1信息非空且节点1信息并节点2并非节点1目标
+%{
 if (~isempty( message_x) ) && (sum(message_x == MN_INDEX_2) == 0) 
     %调用传递脚本前，设定好节点与相遇节点
     nodeIndex = MN_INDEX_1;
@@ -136,6 +137,6 @@ end
 
 %%节点2缓存传至节点1缓存
 
-
+%}
 
 
