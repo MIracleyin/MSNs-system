@@ -98,9 +98,13 @@ if sum(buffer_y == MN_INDEX_1) >= 1
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 %%%依靠中间节点传递信息
 %%节点1信息传至节点2缓存
 %节点1信息非空且节点1信息并节点2并非节点1目标
+%%MSG_X -> Buffer_Y
 if (~isempty( messages_x) ) && (sum(messages_x == MN_INDEX_2) == 0) 
     %调用传递脚本前，设定好节点与相遇节点
     nodeIndex = MN_INDEX_1;
@@ -120,7 +124,7 @@ if (~isempty( messages_x) ) && (sum(messages_x == MN_INDEX_2) == 0)
                 temp_TTL = MN_DATA_ROUTING_temp.VS_NODE(MN_INDEX_2).BUFFER(end - adding_forwardNode_index).TTL;
                 MN_DATA_ROUTING_temp.VS_NODE(MN_INDEX_2).BUFFER(end - adding_forwardNode_index).TTL = temp_TTL + 1;
             end
-
+            
             MN_DATA_ROUTING_temp.BUFFERED_COUNT = MN_DATA_ROUTING_temp.BUFFERED_COUNT + sum(messages_x == forward_node);
             MN_DATA_ROUTING_temp.VS_NODE(MN_INDEX_1).MESSAGE(messages_x == forward_node) = [];
 
@@ -131,11 +135,90 @@ end
 
 
 %%节点2信息传至节点1缓存
-if (~isempty（messages_y) ) && (sum(messages_y == MN_INTEX_1)) 
+%%MSG_Y -> Buffer_X
+if (~isempty（messages_y) ) && (sum(messages_y == MN_INDEX_1) == 0)
+    nodeIndex = MN_INDEX_2;
+    intermeet_node = MN_INDEX_1;
+
+    delete_message = [];
+    for forward_node = unique(messages_y)
+        %protocol_SCPRsetForward; 未完成
+        %如果满足传递调剂
+        if forward_message == 1
+            %节点1缓存储存节点2的信息
+            MN_DATA_ROUTING_temp.VS_NODE(MN_INDEX_1).BUFFER(end + 1 : end + sum(messages_y == forward_node)) = ...
+            MN_DATA_ROUTING_temp.VS_NODE(MN_INDEX_2).MESSAGE(messages_y == forward_node);
+            %统计更新
+            for adding_forwardNode_index = 0 : sum( messages_y == forward_node ) - 1
+                MN_DATA_ROUTING_temp.VS_NODE(MN_INDEX_1).BUFFER(end - adding_forwardNode_index ).NUMBER_OF_FORWARDS(end + 1) = MN_INDEX_2;
+                temp_TTL = MN_DATA_ROUTING_temp.VS_NODE(MN_INDEX_1).BUFFER(end - adding_forwardNode_index ).TTL;
+                MN_DATA_ROUTING_temp.VS_NODE(MN_INDEX_1).BUFFER(end - adding_forwardNode_index ).TTL = temp_TTL + 1;
+            end
+
+            MN_DATA_ROUTING_temp.BUFFERED_COUNT = MN_DATA_ROUTING_temp.BUFFERED_COUNT + sum( messages_y == forward_node);
+            MN_DATA_ROUTING_temp.VS_NODE(MN_INDEX_2).MESSAGE( messages_y == forward_node ) = [];
+
+            in_refresh_buffers;
+        end
+    end
+end
 
 %%节点1缓存传至节点2缓存
+%% BufferX -> BufferY
+if ( ~isempty( buffer_x )) && (sum (buffer_x == MN_INDEX_2 ) == 0)
+    nodeIndex = MN_INDEX_1;
+    intermeet_node = MN_INDEX_2;
+
+    delete_message = [];
+    for forward_node = unique(buffer_x)
+        %protocol_SCPRsetForward; 未完成
+        if forward_message == 1
+            %节点2缓存储存节点1缓存的信息
+            MN_DATA_ROUTING_temp.VS_NODE(MN_INDEX_2).BUFFER(end + 1 : end + sum(buffer_x == forward_node)) = ...
+            MN_DATA_ROUTING_temp.VS_NODE(MN_INDEX_1).BUFFER(buffer_x == forward_node);
+
+            for adding_forwardNode_index = 0 : sum( buffer_x == forward_node) - 1 %message_x
+                MN_DATA_ROUTING_temp.VS_NODE(MN_INDEX_2).BUFFER( end - adding_forwardNode_index).NUMBER_OF_FORWARDS(end + 1) = MN_INDEX_1
+                temp_TTL = MN_DATA_ROUTING_temp.VS_NODE(MN_INDEX_2).BUFFER( end - adding_forwardNode_index).TTL;
+                MN_DATA_ROUTING_temp.VS_NODE(MN_INDEX_2).BUFFER( end - adding_forwardNode_index).TTL = temp_TTL + 1;
+            end
+            
+            MN_DATA_ROUTING_temp.BUFFERED_COUNT = MN_DATA_ROUTING_temp.BUFFERED_COUNT + sum( buffer_x == forward_node);
+            MN_DATA_ROUTING_temp.VS_NODE(MN_INDEX_1).BUFFER( buffer_x == forward_node ) = [];
+
+            in_refresh_buffers;
+        end
+    end
+end
 
 %%节点2缓存传至节点1缓存
+%% BufferY -> BufferX
+if ( ~isempty( buffer_y )) && ( sum (buffer_y == MN_INDEX_1) == 0)
+    nodeIndex = MN_INDEX_2;
+    intermeet_node = MN_INDEX_1;
+
+    delete_message = [];
+    for forward_node = unique(buffer_y)
+        %protocol_SCPRsetForward; 未完成
+        if forward_message == 1
+            %节点1缓存储存节点2缓存的信息
+            MN_DATA_ROUTING_temp.VS_NODE(MN_INDEX_1).BUFFER(end + 1 : end + sum(buffer_y == forward_node)) = ...
+            MN_DATA_ROUTING_temp.VS_NODE(MN_INDEX_2).BUFFER(buffer_y == forward_node);
+
+            for adding_forwardNode_index = 0 : sum(buffer_y == forward_node) - 1 
+                MN_DATA_ROUTING_temp.VS_NODE(MN_INDEX_1).BUFFER(end - adding_forwardNode_index).NUMBER_OF_FORWARDS(end + 1) = MN_INDEX_2;
+                temp_TTL = MN_DATA_ROUTING_temp.VS_NODE(MN_INDEX_1).BUFFER(end - adding_forwardNode_index).TTL;
+                MN_DATA_ROUTING_temp.VS_NODE(MN_INDEX_1).BUFFER( end - adding_forwardNode_index).TTL = temp_TTL + 1;
+            end
+
+            MN_DATA_ROUTING_temp.BUFFERED_COUNT = MN_DATA_ROUTING_temp.BUFFERED_COUNT + sum( buffer_y == forward_node);
+            MN_DATA_ROUTING_temp.VS_NODE(MN_INDEX_2).BUFFER(buffer_y == forward_node) = [];
+
+            in_refresh_buffers;
+        end
+    end
+end
+
 
 %}
 
