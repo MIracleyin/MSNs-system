@@ -70,10 +70,16 @@ for time = 60 : time_step : time_end%
                     %若相遇,则使用指定协议路由
                     %论文的协议
                     case 'SCPR'
-                        SCPR;
+                        protocol_SCPR;
                     %对照协议
-                    case 'other'
-                        OTHER;
+                    case 'Prophet'
+                        protocol_Prophet;
+                    case 'Epidemic'
+                        protocol_Epidemic;
+                    case 'SimBet'
+                        protocol_SimBet;
+                    case 'NULL'
+                        protocol_NULL;
                 end
 
                 clc
@@ -130,9 +136,9 @@ for time = 60 : time_step : time_end%
 
             %获取接收信息的间隔以及信息长度
             [reception_delay(MN_INDEX), packets_received(MN_INDEX)] = ...
-            get_reception_duration(MN_DATA_ROUTING_temp.VS_NODE(MN_INDEX).RECEIVED_MESSAGE);
+            in_get_reception_duration(MN_DATA_ROUTING_temp.VS_NODE(MN_INDEX).RECEIVED_MESSAGE);
             %用于计算信息的公制
-            metric(MN_INDEX) = get_metric_value(MN_DATA_ROUTING_temp.VS_NODE(MN_INDEX).RECEIVED_MESSAGE);
+            metric(MN_INDEX) = in_get_metric_value(MN_DATA_ROUTING_temp.VS_NODE(MN_INDEX).RECEIVED_MESSAGE);
         end
 
         in_buffer(end + 1) = inBuffer;%缓存更新
@@ -150,7 +156,7 @@ for time = 60 : time_step : time_end%
     end
     if ( rem(time, input_settings.MN_T_interval) < time_step) && time ~= 0 && time <= time_end/4 %TODO:待修改
 
-        %no_of_message_nodes = randi( [1 input_settings.MN_N], [1 1] );
+        no_of_message_nodes = randi( [1 input_settings.MN_N], [1 1] );
         %截取长度10
         no_of_message_nodes = 10;
         %生成一长度为1 * 50，数值在0 - 50之间的整数
@@ -161,7 +167,7 @@ for time = 60 : time_step : time_end%
         message_nodes( message_nodes == 0 ) = input_settings.MN_N;
         %为每个节点创建新的信息
         for MN_INDEX = 1 : input_settings.MN_N
-            create_new_message; %创建新信息
+            in_create_new_message; %创建新信息
         end
         %创建成功则信息序列 + 1
         message_index = message_index + 1;

@@ -18,15 +18,15 @@ MSN_INIT;
 
 AREA_DATA = MSN_AREA(input_settings);
 
-MN_DATA_INIT = MN_INIT(input_settings,15); %用于初始化移动节点的家与主任务，后续仿真中不改变该值
+MN_DATA_INIT = MN_INIT(input_settings,2); %用于初始化移动节点的家与主任务，后续仿真中不改变该值
 
 %% Simulate the mobile of MNs and record its data
 %生成1天的数据用于计算节点社交指标
 %节点位置数据无误
-MN_DATA = MSN_RPM3(input_settings,AREA_DATA,MN_DATA_INIT,15); 
+MN_DATA = MSN_RPM3(input_settings,AREA_DATA,MN_DATA_INIT,2); 
 
-[MN_DATA_SOCIA, ROUTING_TABLE] = MSN_CALCULATE2(input_settings,MN_DATA,10,1.5);
+[MN_DATA_SOCIA, ROUTING_TABLE] = MSN_CALCULATE2(input_settings,MN_DATA,1,2);
 
-[MN_DATA_ROUTING, Report] = MSN_ROUTING(input_settings, MN_DATA, ROUTING_TABLE, 'SCPR', 15);
+[MN_DATA_ROUTING, Report] = MSN_ROUTING(input_settings, MN_DATA, ROUTING_TABLE, 'NULL', 2);
 
 save('MSN_init_data');
