@@ -112,7 +112,7 @@ if (~isempty( messages_x) ) && (sum(messages_x == MN_INDEX_2) == 0)
 
     delete_message = [];
     for forward_node = unique(messages_x)
-        %protocol_SCPRsetForward; 未完成
+        protocol_SCPRsetForward;
         %如果满足传递调剂
         if forward_message == 1
             %节点2缓存储存节点1的信息
@@ -136,14 +136,14 @@ end
 
 %%节点2信息传至节点1缓存
 %%MSG_Y -> Buffer_X
-if (~isempty（messages_y) ) && (sum(messages_y == MN_INDEX_1) == 0)
+if (~isempty(messages_y) ) && (sum(messages_y == MN_INDEX_1) == 0)
     nodeIndex = MN_INDEX_2;
     intermeet_node = MN_INDEX_1;
 
     delete_message = [];
     for forward_node = unique(messages_y)
-        %protocol_SCPRsetForward; 未完成
-        %如果满足传递调剂
+        protocol_SCPRsetForward;
+        %如果满足传递调
         if forward_message == 1
             %节点1缓存储存节点2的信息
             MN_DATA_ROUTING_temp.VS_NODE(MN_INDEX_1).BUFFER(end + 1 : end + sum(messages_y == forward_node)) = ...
@@ -171,7 +171,7 @@ if ( ~isempty( buffer_x )) && (sum (buffer_x == MN_INDEX_2 ) == 0)
 
     delete_message = [];
     for forward_node = unique(buffer_x)
-        %protocol_SCPRsetForward; 未完成
+        protocol_SCPRsetForward;
         if forward_message == 1
             %节点2缓存储存节点1缓存的信息
             MN_DATA_ROUTING_temp.VS_NODE(MN_INDEX_2).BUFFER(end + 1 : end + sum(buffer_x == forward_node)) = ...
@@ -199,7 +199,7 @@ if ( ~isempty( buffer_y )) && ( sum (buffer_y == MN_INDEX_1) == 0)
 
     delete_message = [];
     for forward_node = unique(buffer_y)
-        %protocol_SCPRsetForward; 未完成
+        protocol_SCPRsetForward;
         if forward_message == 1
             %节点1缓存储存节点2缓存的信息
             MN_DATA_ROUTING_temp.VS_NODE(MN_INDEX_1).BUFFER(end + 1 : end + sum(buffer_y == forward_node)) = ...
