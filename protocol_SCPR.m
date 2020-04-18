@@ -116,7 +116,7 @@ if (~isempty( messages_x) ) && (sum(messages_x == MN_INDEX_2) == 0)
         %如果满足传递调剂
         if forward_message == 1
             %节点2缓存储存节点1的信息
-            MN_DATA_ROUTING_temp.VS_NODE(MN_INDEX_2).BUFFER(end + 1 : end + sum(messages_x == forward_message)) = ...
+            MN_DATA_ROUTING_temp.VS_NODE(MN_INDEX_2).BUFFER(end + 1 : end + sum(messages_x == forward_node)) = ...
             MN_DATA_ROUTING_temp.VS_NODE(MN_INDEX_1).MESSAGE(messages_x == forward_node);
             %统计更新
             for adding_forwardNode_index = 0 : sum(messages_x == forward_node) - 1
