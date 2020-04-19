@@ -156,7 +156,7 @@ for time = 60 : time_step : time_end%
     end
     if ( rem(time, input_settings.MN_T_interval) < time_step) && time ~= 0 && time <= time_end/4 %TODO:待修改
 
-        no_of_message_nodes = randi( [1 input_settings.MN_N], [1 1] );
+        %no_of_message_nodes = randi( [1 input_settings.MN_N], [1 1] );
         %截取长度10
         no_of_message_nodes = 10;
         %生成一长度为1 * 50，数值在0 - 50之间的整数

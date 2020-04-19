@@ -1,4 +1,4 @@
-function metric = get_metric_value(node_received_messages)
+function metric = in_get_metric_value(node_received_messages)
          %
 
 %先设公制值为0

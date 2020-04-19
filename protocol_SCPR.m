@@ -178,7 +178,7 @@ if ( ~isempty( buffer_x )) && (sum (buffer_x == MN_INDEX_2 ) == 0)
             MN_DATA_ROUTING_temp.VS_NODE(MN_INDEX_1).BUFFER(buffer_x == forward_node);
 
             for adding_forwardNode_index = 0 : sum( buffer_x == forward_node) - 1 %message_x
-                MN_DATA_ROUTING_temp.VS_NODE(MN_INDEX_2).BUFFER( end - adding_forwardNode_index).NUMBER_OF_FORWARDS(end + 1) = MN_INDEX_1
+                MN_DATA_ROUTING_temp.VS_NODE(MN_INDEX_2).BUFFER( end - adding_forwardNode_index).NUMBER_OF_FORWARDS(end + 1) = MN_INDEX_1;
                 temp_TTL = MN_DATA_ROUTING_temp.VS_NODE(MN_INDEX_2).BUFFER( end - adding_forwardNode_index).TTL;
                 MN_DATA_ROUTING_temp.VS_NODE(MN_INDEX_2).BUFFER( end - adding_forwardNode_index).TTL = temp_TTL + 1;
             end

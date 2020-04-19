@@ -190,7 +190,7 @@ for MN_INDEX_1 = 1 : input_settings.MN_N
         MN_DATA_SOCIA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).DIRECT_PROBABILITY * ageing;%ageing
         %直接概率存入路由表
         ROUTING_TABLE_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).DIRECT_PROBABILITY = ...
-        MN_DATA_SOCIA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).DIRECT_PROBABILITY
+        MN_DATA_SOCIA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).DIRECT_PROBABILITY;
         %结合仿真时长，可以结合8修正ageing效应
     end
     str_bar = ['NO.' num2str(wb) ' Mobile Node'];
