@@ -25,8 +25,8 @@ MN_DATA_INIT = MN_INIT(input_settings,15); %用于初始化移动节点的家与
 %节点位置数据无误
 MN_DATA = MSN_RPM3(input_settings,AREA_DATA,MN_DATA_INIT,15); 
 
-[MN_DATA_SOCIA, ROUTING_TABLE] = MSN_CALCULATE2(input_settings,MN_DATA,10,1.5);
+[MN_DATA_SOCIA, ROUTING_TABLE] = MSN_CALCULATE3(input_settings,MN_DATA,10,1.5); %改进为HOP4 4跳
 
-[MN_DATA_ROUTING, Report] = MSN_ROUTING(input_settings, MN_DATA, ROUTING_TABLE, 'SCPR', 15);
+[MN_DATA_ROUTING, Report] = MSN_ROUTING(input_settings, MN_DATA, ROUTING_TABLE, 'SCPR', 15); %SCPR已修改
 
 save('MSN_init_data');
