@@ -104,7 +104,7 @@ end
 %%%依靠中间节点传递信息
 %%节点1信息传至节点2缓存
 %节点1信息非空且节点1信息并节点2并非节点1目标
-%%MSG_X -> Buffer_Y
+%%1.MSG_X -> Buffer_Y
 if (~isempty( messages_x) ) && (sum(messages_x == MN_INDEX_2) == 0) 
     %调用传递脚本前，设定好节点与相遇节点
     nodeIndex = MN_INDEX_1;
@@ -135,7 +135,7 @@ end
 
 
 %%节点2信息传至节点1缓存
-%%MSG_Y -> Buffer_X
+%%2.MSG_Y -> Buffer_X
 if (~isempty(messages_y) ) && (sum(messages_y == MN_INDEX_1) == 0)
     nodeIndex = MN_INDEX_2;
     intermeet_node = MN_INDEX_1;
@@ -164,7 +164,7 @@ if (~isempty(messages_y) ) && (sum(messages_y == MN_INDEX_1) == 0)
 end
 
 %%节点1缓存传至节点2缓存
-%% BufferX -> BufferY
+%%3.BufferX -> BufferY
 if ( ~isempty( buffer_x )) && (sum (buffer_x == MN_INDEX_2 ) == 0)
     nodeIndex = MN_INDEX_1;
     intermeet_node = MN_INDEX_2;
@@ -192,7 +192,7 @@ if ( ~isempty( buffer_x )) && (sum (buffer_x == MN_INDEX_2 ) == 0)
 end
 
 %%节点2缓存传至节点1缓存
-%% BufferY -> BufferX
+%%4.BufferY -> BufferX
 if ( ~isempty( buffer_y )) && ( sum (buffer_y == MN_INDEX_1) == 0)
     nodeIndex = MN_INDEX_2;
     intermeet_node = MN_INDEX_1;

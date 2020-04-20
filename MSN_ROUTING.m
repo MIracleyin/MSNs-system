@@ -25,6 +25,9 @@ message_index = 1;
 %用于记录路由时间序列 1 - 1440
 routing_time_index = 1;
 
+%SimBet、Prophet 协议的参数计算
+
+ 
 %初始化节点携带的信息
 MN_DATA_ROUTING_temp.BUFFERED_COUNT = 0;
 MN_DATA_ROUTING_temp.RECEIVED_DIRECTLY = 0;
