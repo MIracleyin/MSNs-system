@@ -78,17 +78,6 @@ set(wait_bar, 'name', 'Mobile Node HOP calculating...');
 wb = 50/length(1:input_settings.MN_N);
 for MN_INDEX_1 = 1 : input_settings.MN_N%源节点MN1
     for MN_INDEX_2 = 1 : input_settings.MN_N%目标节点MN2
-        %for MN_INDEX_X = 1 : input_settings.MN_N
-        %    if (MN_INDEX_X ~= MN_INDEX_1) && (MN_INDEX_X ~= MN_INDEX_2)
-        %        MN_DATA_SOCIA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).TRANS_PROBABILITY_HOP = ...
-        %        MN_DATA_SOCIA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_X).DIRECT_PROBABILITY * ...
-        %        MN_DATA_SOCIA_temp.VS_NODE(MN_INDEX_X).SOCIAL_CONTACT(MN_INDEX_2).DIRECT_PROBABILITY;
-        %        if isnan(MN_DATA_SOCIA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).TRANS_PROBABILITY_HOP)
-        %            MN_DATA_SOCIA_temp.VS_NODE(MN_INDEX_1).SOCIAL_CONTACT(MN_INDEX_2).TRANS_PROBABILITY_HOP2 = 0;
-        %        end
-        %    end
-        
-        %正式仿真
         for MN_INDEX_X1 = 1 : input_settings.MN_N%任取一中间节点1
             for MN_INDEX_X2 = 1 : input_settings.MN_N%任取一中间节点2
                 for MN_INDEX_X3 = 1 : input_settings.MN_N%任取一中间节点3

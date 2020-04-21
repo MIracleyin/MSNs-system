@@ -18,10 +18,10 @@ end
 
 % Remove message from source queue
 if ~isempty(IDs)
-mobilized_node_tmp.VS_NODE(index1).MESSAGE(  IDs   ) = [];
+MN_DATA_ROUTING_temp.VS_NODE(MN_INDEX_1).MESSAGE(  IDs   ) = [];
 
-Refresh_ID;
-refresh_buffers;
+in_Refresh_ID;
+in_refresh_buffers;
 end
 
 end
@@ -43,10 +43,10 @@ end
 
 % Remove message from source queue
 if ~isempty(IDs)
-mobilized_node_tmp.VS_NODE(index1).BUFFER(  IDs   ) = [];
+MN_DATA_ROUTING_temp.VS_NODE(MN_INDEX_1).BUFFER(  IDs   ) = [];
 
-Refresh_ID;
-refresh_buffers;
+in_Refresh_ID;
+in_refresh_buffers;
 end
 
 end
@@ -68,10 +68,10 @@ end
 
 % Remove message from source queue
 if ~isempty(IDs)
-mobilized_node_tmp.VS_NODE(index2).MESSAGE(  IDs   ) = [];
+MN_DATA_ROUTING_temp.VS_NODE(MN_INDEX_2).MESSAGE(  IDs   ) = [];
 
-Refresh_ID;
-refresh_buffers;
+in_Refresh_ID;
+in_refresh_buffers;
 end
 
 end
@@ -93,10 +93,10 @@ end
 
 % Remove message from source queue
 if ~isempty(IDs)
-mobilized_node_tmp.VS_NODE(index2).BUFFER(  IDs   ) = [];
+MN_DATA_ROUTING_temp.VS_NODE(MN_INDEX_2).BUFFER(  IDs   ) = [];
 
-Refresh_ID;
-refresh_buffers;
+in_Refresh_ID;
+in_refresh_buffers;
 end
 
 end

@@ -220,6 +220,4 @@ if ( ~isempty( buffer_y )) && ( sum (buffer_y == MN_INDEX_1) == 0)
 end
 
 
-%}
-
 
