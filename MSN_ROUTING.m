@@ -87,7 +87,7 @@ for time = 60 : time_step : time_end%
 
                 clc
                 %用于输出节点相关信息
-                disp(['protocol:', protocol, 'Simulate Time', num2str(1440*s_data_day)])
+                disp(['protocol:', protocol, '-Simulate Time ', num2str(1440*s_data_day)])
                 disp(['Time: ',num2str(time)])
                 disp('--------------------------------')
                 disp(['Message Count: ',num2str(MN_DATA_ROUTING_temp.MESSAGES_COUNT)]) %信息总数量报告

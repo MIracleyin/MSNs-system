@@ -29,7 +29,7 @@ MN_DATA = MSN_RPM3(input_settings,AREA_DATA,MN_DATA_INIT,15);
 
 %路由表                             %para:仿真初始化,节点数据,路由表时长,ageing(只有scpr需要,其余随意赋值),路由协议
                                                                                                         %路由协议与路由结果相匹配，Epidemic使用NULL
-MN_DATA_SOCIA = MSN_CALCULATE4(input_settings,MN_DATA,10,1.5,'SCPR'); %null协议无需计算HOP 使用2减少计算  
+MN_DATA_SOCIA = MSN_CALCULATE4(input_settings,MN_DATA,10,1.5,'SimBet'); %null协议无需计算HOP 使用2减少计算  
 
 % 路由结果        数据结果          %para:仿真初始化     节点数据  路由表数据     路由协议  仿真时长 与初始化，移动模型相同 
-[MN_DATA_ROUTING, Report] = MSN_ROUTING(input_settings, MN_DATA, MN_DATA_SOCIA, 'SCPR', 15);
+%[MN_DATA_ROUTING, Report] = MSN_ROUTING(input_settings, MN_DATA, MN_DATA_SOCIA, 'SimBet', 15);

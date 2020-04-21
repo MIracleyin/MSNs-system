@@ -142,8 +142,8 @@ if ( ~isempty( messages_y ) ) && (sum (messages_y == MN_INDEX_1  ) == 0)
     
     for forward_node = unique(messages_y)
         
-        node1 = routing_table.VS_NODE(MN_INDEX_1);
-        node2 = routing_table.VS_NODE(MN_INDEX_2);
+        node1 = routing_table.VS_NODE(MN_INDEX_2);
+        node2 = routing_table.VS_NODE(MN_INDEX_1);
         forward_message = protocol_SimBet_forward(node1, node2, forward_node, alfa, beta);
         
         if forward_message == 1
@@ -202,8 +202,8 @@ if ( ~isempty( buffer_y ) ) && (sum (buffer_y == MN_INDEX_1  ) == 0)
    
     for forward_node = unique(buffer_y)
         
-        node1 = routing_table.VS_NODE(MN_INDEX_1);
-        node2 = routing_table.VS_NODE(MN_INDEX_2);
+        node1 = routing_table.VS_NODE(MN_INDEX_2);
+        node2 = routing_table.VS_NODE(MN_INDEX_1);
         forward_message = protocol_SimBet_forward(node1, node2, forward_node, alfa, beta);
         
         if forward_message == 1
