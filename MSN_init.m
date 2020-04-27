@@ -16,7 +16,7 @@ cWidth = 100; %(m)
 N_communities = 15; %(communities) number of communities
 
 % Mobile Nodes Settings
-N_nodes = 50; %(MNs) number of MNs
+N_nodes = 10; %(MNs) number of MNs
 
 % A speed is chosen betweet V_max and V_min uniformly,
 % which represents the speed of its cross-community.
